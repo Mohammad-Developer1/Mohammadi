@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: projectMohammadi
+  datasource:
+    username: postgres
+    password: 12345
+    url: jdbc:postgresql://localhost:5432/project
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+  data:
+    jdbc:
+      dialect: postgresql
