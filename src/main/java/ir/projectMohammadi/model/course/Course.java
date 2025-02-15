@@ -9,8 +9,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
@@ -23,10 +21,10 @@ public class Course extends Base<Long> {
     private String title;
 
     @Column
-    private LocalDate startDate;
+    private String startDate;
 
     @Column
-    private LocalDate endDate;
+    private String endDate;
 
     @ManyToOne(fetch = FetchType.LAZY,cascade=CascadeType.REMOVE)
     @JoinColumn(name = "teacher")
