@@ -1,8 +1,9 @@
 package ir.projectMohammadi.repository.teacher;
 
 import ir.projectMohammadi.model.teacher.Teacher;
-import ir.projectMohammadi.repository.base.IBaseRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface ITeacherRepository extends IBaseRepository<Teacher,Long>  {
+@Repository
+public interface ITeacherRepository extends JpaRepository<Teacher, Long> {
 }

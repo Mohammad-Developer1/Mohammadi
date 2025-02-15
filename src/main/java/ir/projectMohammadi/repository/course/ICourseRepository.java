@@ -1,8 +1,10 @@
 package ir.projectMohammadi.repository.course;
 
 import ir.projectMohammadi.model.course.Course;
-import ir.projectMohammadi.repository.base.IBaseRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface ICourseRepository extends IBaseRepository<Course,Long> {
+@Repository
+public interface ICourseRepository extends JpaRepository<Course, Long> {
 
 }

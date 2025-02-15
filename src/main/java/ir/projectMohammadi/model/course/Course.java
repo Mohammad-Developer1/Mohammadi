@@ -30,7 +30,7 @@ public class Course extends Base<Long> {
     @JoinColumn(name = "teacher")
     private Teacher teacher;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
     @JoinColumn
     private Administrator administrator;
 

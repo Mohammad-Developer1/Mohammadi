@@ -1,8 +1,10 @@
 package ir.projectMohammadi.repository.administrator;
 
 import ir.projectMohammadi.model.administor.Administrator;
-import ir.projectMohammadi.repository.base.IBaseRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface IAdministratorRepository extends IBaseRepository<Administrator,Long> {
+@Repository
+public interface IAdministratorRepository extends JpaRepository<Administrator, Long> {
 
 }

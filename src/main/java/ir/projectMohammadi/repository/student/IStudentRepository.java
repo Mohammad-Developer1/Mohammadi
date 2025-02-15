@@ -1,7 +1,11 @@
 package ir.projectMohammadi.repository.student;
 
 import ir.projectMohammadi.model.student.Student;
-import ir.projectMohammadi.repository.base.IBaseRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface IStudentRepository extends IBaseRepository<Student,Long> {
+@Repository
+public interface IStudentRepository extends JpaRepository<Student, Long> {
+
+
 }
