@@ -3,6 +3,7 @@ package ir.projectMohammadi.service.teacher.impl;
 import ir.projectMohammadi.model.teacher.Teacher;
 import ir.projectMohammadi.repository.teacher.ITeacherRepository;
 import ir.projectMohammadi.service.teacher.ITeacherService;
+import ir.projectMohammadi.web.viewModel.teacher.TeacherViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -15,12 +16,11 @@ public class TeacherServiceImpl implements ITeacherService {
     private ITeacherRepository teacherRepository;
 
     @Override
-    public Boolean saveAndUpdateTeacher(Teacher teacher) {
+    public Teacher saveAndUpdateTeacher(Teacher teacher) {
         if (teacher == null) {
             throw new NullPointerException("Teacher is null");
         }else {
-            teacherRepository.save(teacher);
-            return true;
+           return teacherRepository.save(teacher);
         }
     }
 
