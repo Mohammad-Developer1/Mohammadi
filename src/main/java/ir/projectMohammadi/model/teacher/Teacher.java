@@ -19,10 +19,9 @@ import java.util.Set;
 @Table(name = "TEACHER")
 public class Teacher extends Person {
 
-    @OneToMany(mappedBy = "teacher")
-    @JoinColumn
+    @OneToMany(mappedBy = "teacher",fetch = FetchType.LAZY)
     private Set<Course> course;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private Administrator administrator;
 }

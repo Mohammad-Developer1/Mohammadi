@@ -3,6 +3,7 @@ package ir.projectMohammadi.model.administor;
 import ir.projectMohammadi.model.baseModel.Person;
 import ir.projectMohammadi.model.course.Course;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,6 @@ import java.util.Set;
 @Table(name = "ADMINISTRATOR")
 public class Administrator extends Person {
 
-    @OneToMany(mappedBy = "administrator")
+    @OneToMany(mappedBy = "administrator",fetch = FetchType.LAZY)
     private Set<Course> courses;
 }

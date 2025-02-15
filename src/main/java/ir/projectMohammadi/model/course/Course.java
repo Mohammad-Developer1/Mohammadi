@@ -10,7 +10,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -29,11 +28,11 @@ public class Course extends Base<Long> {
     @Column
     private LocalDate endDate;
 
-    @ManyToOne
-    @JoinColumn
+    @ManyToOne(fetch = FetchType.LAZY,cascade=CascadeType.REMOVE)
+    @JoinColumn(name = "teacher")
     private Teacher teacher;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private Administrator administrator;
 
