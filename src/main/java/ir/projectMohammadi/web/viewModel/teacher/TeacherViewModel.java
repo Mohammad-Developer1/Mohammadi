@@ -1,6 +1,5 @@
 package ir.projectMohammadi.web.viewModel.teacher;
 
-import ir.projectMohammadi.model.administor.Administrator;
 import ir.projectMohammadi.model.course.Course;
 import ir.projectMohammadi.web.viewModel.base.PersonViewModel;
 import lombok.Data;
@@ -15,5 +14,7 @@ public class TeacherViewModel extends PersonViewModel {
 
     private Set<Course> course;
 
-    private Administrator administrator;
+    private Long administratorId;
+
+    private String administratorLastName;
 }
