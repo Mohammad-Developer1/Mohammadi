@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net https://dozer.sourceforge.net/schema/beanmapping.xsd">
+    <mapping>
+        <class-a>ir.projectMohammadi.model.student.Student</class-a>
+        <class-b>ir.projectMohammadi.web.viewModel.student.StudentViewModel</class-b>
+        <field>
+            <a>course</a>
+            <b>course</b>
+        </field>
+    </mapping>
+</mappings>
