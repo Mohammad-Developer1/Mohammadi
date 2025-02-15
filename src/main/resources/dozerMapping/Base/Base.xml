@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net https://dozer.sourceforge.net/schema/beanmapping.xsd">
+    <mapping>
+        <class-a>ir.projectMohammadi.model.baseModel.Base</class-a>
+        <class-b>ir.projectMohammadi.web.viewModel.base.BaseViewModel</class-b>
+        <field>
+            <a>ID</a>
+            <b>ID</b>
+            <a-hint>java.lang.Long</a-hint>
+            <b-hint>java.lang.Long</b-hint>
+        </field>
+    </mapping>
+</mappings>
