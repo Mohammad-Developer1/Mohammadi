@@ -29,5 +29,16 @@ public class StudentController {
         return ModelMapper.mapList(studentService.getAllStudent(),StudentViewModel.class);
     }
 
+    @GetMapping("/getStudent/{id}")
+    @ResponseBody
+    public StudentViewModel getStudent(@PathVariable Long id) {
+        return ModelMapper.map(studentService.getStudent(id),StudentViewModel.class);
+    }
+
+    @DeleteMapping("/deleteStudentById/{id}")
+    @ResponseBody
+    public Boolean deleteStudentById(@PathVariable Long id) {
+        return studentService.deleteStudent(id);
+    }
 
 }
