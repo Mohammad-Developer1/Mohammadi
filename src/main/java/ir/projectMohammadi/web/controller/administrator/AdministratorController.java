@@ -1,4 +1,4 @@
-package ir.projectMohammadi.web.controller;
+package ir.projectMohammadi.web.controller.administrator;
 
 import ir.projectMohammadi.model.administor.Administrator;
 import ir.projectMohammadi.service.administrator.IAdministratorService;

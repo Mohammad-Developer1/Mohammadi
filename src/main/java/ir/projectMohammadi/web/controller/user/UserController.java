@@ -1,4 +1,4 @@
-package ir.projectMohammadi.web.controller;
+package ir.projectMohammadi.web.controller.user;
 
 
 import ir.projectMohammadi.model.enums.role.Role;

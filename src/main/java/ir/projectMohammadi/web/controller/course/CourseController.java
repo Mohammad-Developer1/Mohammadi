@@ -1,4 +1,4 @@
-package ir.projectMohammadi.web.controller;
+package ir.projectMohammadi.web.controller.course;
 
 import ir.projectMohammadi.model.course.Course;
 import ir.projectMohammadi.service.course.ICourseService;
