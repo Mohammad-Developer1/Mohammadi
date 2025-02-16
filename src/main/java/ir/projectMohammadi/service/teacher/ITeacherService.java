@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface ITeacherService {
 
-    Teacher saveAndUpdateTeacher(Teacher teacher);
+    Boolean saveAndUpdateTeacher(Teacher teacher);
     List<Teacher> getAllTeacher();
     Teacher getTeacher(Long id);
-    void deleteTeacher(Long id);
+    Boolean deleteTeacherById(Long id);
 }

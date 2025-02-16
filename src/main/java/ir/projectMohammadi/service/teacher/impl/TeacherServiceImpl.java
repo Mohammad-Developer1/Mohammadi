@@ -16,11 +16,12 @@ public class TeacherServiceImpl implements ITeacherService {
     private ITeacherRepository teacherRepository;
 
     @Override
-    public Teacher saveAndUpdateTeacher(Teacher teacher) {
+    public Boolean saveAndUpdateTeacher(Teacher teacher) {
         if (teacher == null) {
             throw new NullPointerException("Teacher is null");
         }else {
-           return teacherRepository.save(teacher);
+            teacherRepository.save(teacher);
+            return true;
         }
     }
 
@@ -39,11 +40,11 @@ public class TeacherServiceImpl implements ITeacherService {
     }
 
     @Override
-    public void deleteTeacher(Long id) {
+    public Boolean deleteTeacherById(Long id) {
         if (id == null) {
             throw new NullPointerException("Teacher id is null");
         }else {
-            teacherRepository.deleteById(id);
+            return teacherRepository.deleteTeacher(id);
         }
     }
 }
