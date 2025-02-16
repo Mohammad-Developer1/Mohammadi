@@ -39,11 +39,11 @@ public class AdministratorServiceImpl implements IAdministratorService {
     }
 
     @Override
-    public void deleteAdministrator(Long id) {
+    public Boolean deleteAdministrator(Long id) {
         if (id == null) {
             throw new NullPointerException("administrator id is Null");
         }else {
-            administratorRepository.deleteById(id);
+          return   administratorRepository.deleteAdministrator(id);
         }
     }
 }

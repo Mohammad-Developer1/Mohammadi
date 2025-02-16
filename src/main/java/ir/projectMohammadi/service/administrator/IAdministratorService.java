@@ -8,5 +8,5 @@ public interface IAdministratorService {
     Boolean saveAndUpdateAdministrator(Administrator administrator);
     List<Administrator> getAllAdministrator();
     Administrator getAdministrator(Long id);
-    void deleteAdministrator(Long id);
+    Boolean deleteAdministrator(Long id);
 }
