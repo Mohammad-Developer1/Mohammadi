@@ -13,20 +13,20 @@ import lombok.*;
 public abstract class Person extends Base<Long> {
 
 
-    @Column(   length = 50,nullable = false)
+    @Column(   length = 50)
     private String firstName;
 
 
-    @Column(  length = 50,nullable = false)
+    @Column(  length = 50)
     private String lastName;
 
-    @Column( length = 50,nullable = false)
+    @Column( length = 50)
     private String nationality;
 
-    @Column( length = 10,nullable = false)
+    @Column( length = 10)
     private String nationalCode;
 
-    @Column(length = 50,nullable = false)
+    @Column(length = 50)
     private String email;
 
     @Column( length = 11)
