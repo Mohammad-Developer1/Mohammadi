@@ -8,5 +8,5 @@ public interface IStudentService {
     Boolean saveAndUpdateStudent(Student student);
     List<Student> getAllStudent();
     Student getStudent(Long id);
-    void deleteStudent(Long id);
+    Boolean deleteStudent(Long id);
 }

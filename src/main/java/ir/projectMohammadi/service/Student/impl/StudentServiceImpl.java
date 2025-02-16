@@ -39,11 +39,11 @@ public class StudentServiceImpl implements IStudentService {
     }
 
     @Override
-    public void deleteStudent(Long id) {
+    public Boolean deleteStudent(Long id) {
         if (id == null) {
             throw new NullPointerException("id is null");
         }else {
-            studentRepository.deleteById(id);
+          return studentRepository.deleteStudentByID(id);
         }
     }
 }
