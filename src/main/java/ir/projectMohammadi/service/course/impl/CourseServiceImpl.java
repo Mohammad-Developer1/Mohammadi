@@ -18,7 +18,7 @@ public class CourseServiceImpl implements ICourseService {
     public Boolean saveAndUpdateCourse(Course course) {
         if (course == null) {
             throw new NullPointerException("Course is null");
-        }else {
+        } else {
             courseRepository.save(course);
             return true;
         }
@@ -33,17 +33,17 @@ public class CourseServiceImpl implements ICourseService {
     public Course getCourse(Long id) {
         if (id == null) {
             throw new NullPointerException("Course id is null");
-        }else {
+        } else {
             return courseRepository.findById(id).get();
         }
     }
 
     @Override
-    public void deleteCourse(Long id) {
+    public Boolean deleteCourse(Long id) {
         if (id == null) {
             throw new NullPointerException("Course id is null");
-        }else {
-            courseRepository.deleteById(id);
+        } else {
+            return courseRepository.deleteCourse(id);
         }
     }
 }

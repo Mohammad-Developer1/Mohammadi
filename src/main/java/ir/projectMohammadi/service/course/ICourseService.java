@@ -8,5 +8,5 @@ public interface ICourseService {
     Boolean saveAndUpdateCourse(Course course);
     List<Course> getAllCourse();
     Course getCourse(Long id);
-    void deleteCourse(Long id);
+    Boolean deleteCourse(Long id);
 }
