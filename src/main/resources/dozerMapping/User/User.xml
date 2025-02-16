@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net https://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+
+    <mapping>
+        <class-a>ir.projectMohammadi.model.user.User</class-a>
+        <class-b>ir.projectMohammadi.web.viewModel.User.UserViewModel</class-b>
+
+        <field>
+            <a>username</a>
+            <b>username</b>
+            <a-hint>java.lang.String</a-hint>
+            <b-hint>java.lang.String</b-hint>
+        </field>
+
+        <field>
+            <a>firstName</a>
+            <b>firstName</b>
+            <a-hint>java.lang.String</a-hint>
+            <b-hint>java.lang.String</b-hint>
+        </field>
+
+        <field>
+            <a>lastName</a>
+            <b>lastName</b>
+            <a-hint>java.lang.String</a-hint>
+            <b-hint>java.lang.String</b-hint>
+        </field>
+
+        <field>
+            <a>email</a>
+            <b>email</b>
+            <a-hint>java.lang.String</a-hint>
+            <b-hint>java.lang.String</b-hint>
+        </field>
+
+        <field>
+            <a>mobileNumber</a>
+            <b>mobileNumber</b>
+            <a-hint>java.lang.String</a-hint>
+            <b-hint>java.lang.String</b-hint>
+        </field>
+
+        <field>
+            <a>role</a>
+            <b>role</b>
+            <a-hint>ir.projectMohammadi.model.enums.role.Role</a-hint>
+            <b-hint>ir.projectMohammadi.model.enums.role.Role</b-hint>
+        </field>
+
+        <field>
+            <a>status</a>
+            <b>status</b>
+            <a-hint>ir.projectMohammadi.model.enums.status.Status</a-hint>
+            <b-hint>ir.projectMohammadi.model.enums.status.Status</b-hint>
+        </field>
+
+
+        <field>
+            <a>password</a>
+            <b>password</b>
+        </field>
+
+    </mapping>
+
+</mappings>
