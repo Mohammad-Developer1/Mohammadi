@@ -128,5 +128,20 @@ public class UserServiceImpl implements IUserService {
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public Optional<User> findByMobileNumber(String mobileNumber) {
+        return userRepository.findByMobileNumber(mobileNumber);
+    }
+
+    @Override
+    public void save(User user) {
+        userRepository.save(user);
+    }
 }
 

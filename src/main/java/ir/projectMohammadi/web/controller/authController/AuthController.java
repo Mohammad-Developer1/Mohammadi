@@ -2,8 +2,8 @@ package ir.projectMohammadi.web.controller.authController;
 
 import ir.projectMohammadi.model.enums.status.Status;
 import ir.projectMohammadi.model.user.User;
-import ir.projectMohammadi.repository.UserRepository;
 import ir.projectMohammadi.service.security.MyUserDetailsService;
+import ir.projectMohammadi.service.user.IUserService;
 import ir.projectMohammadi.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ import java.util.Optional;
 public class AuthController {
 
     @Autowired
-    private UserRepository userRepository;
+    private IUserService userService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -39,19 +39,19 @@ public class AuthController {
     @ResponseBody
     public ResponseEntity<String> signup(@RequestBody User user) {
 
-        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+        if (userService.findByUsername(user.getUsername()).isPresent()) {
             return ResponseEntity.badRequest().body("Username already exists.");
         }
-        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+        if (userService.findByEmail(user.getEmail()).isPresent()) {
             return ResponseEntity.badRequest().body("Email already exists.");
         }
-        if (userRepository.findByMobileNumber(user.getMobileNumber()).isPresent()) {
+        if (userService.findByMobileNumber(user.getMobileNumber()).isPresent()) {
             return ResponseEntity.badRequest().body("Mobile number already exists.");
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setStatus(Status.PENDING);
-        userRepository.save(user);
+        userService.save(user);
 
         return ResponseEntity.ok("Signup request sent. Waiting for admin approval.");
     }
@@ -59,7 +59,7 @@ public class AuthController {
     @PostMapping("/login")
     @ResponseBody
     public ResponseEntity<?> login(@RequestParam String username, @RequestParam String password) {
-        Optional<User> userOptional = userRepository.findByUsername(username);
+        Optional<User> userOptional = userService.findByUsername(username);
         if (userOptional.isEmpty()) {
             return ResponseEntity.badRequest().body("User not found.");
         }

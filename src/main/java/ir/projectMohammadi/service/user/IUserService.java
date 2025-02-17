@@ -21,4 +21,10 @@ public interface IUserService {
     List<User> findAll();
 
     Optional<User> findByUsername(String username);
+
+    Optional<User> findByEmail(String email);
+
+    Optional<User> findByMobileNumber(String mobileNumber);
+
+    void save(User user);
 }
