@@ -1,4 +1,4 @@
-package ir.projectMohammadi.config;
+package ir.projectMohammadi.config.jwtRequestFilter;
 
 import ir.projectMohammadi.util.JwtUtil;
 import jakarta.servlet.FilterChain;

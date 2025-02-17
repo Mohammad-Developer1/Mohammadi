@@ -1,4 +1,4 @@
-package ir.projectMohammadi.web.controller;
+package ir.projectMohammadi.web.controller.authController;
 
 import ir.projectMohammadi.model.enums.status.Status;
 import ir.projectMohammadi.model.user.User;
