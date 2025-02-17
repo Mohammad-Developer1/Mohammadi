@@ -1,6 +1,7 @@
 package ir.projectMohammadi.model.baseModel;
 
 
+import ir.projectMohammadi.model.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,24 +14,20 @@ import lombok.*;
 public abstract class Person extends Base<Long> {
 
 
-    @Column(   length = 50)
+    @Column(nullable = false)
     private String firstName;
 
-
-    @Column(  length = 50)
+    @Column(nullable = false)
     private String lastName;
 
-    @Column( length = 50)
-    private String nationality;
-
-    @Column( length = 10)
-    private String nationalCode;
-
-    @Column(length = 50)
+    @Column(nullable = false, unique = true)
     private String email;
 
-    @Column( length = 11)
-    private String phoneNumber;
+    @Column(nullable = false, unique = true)
+    private String mobileNumber;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID",nullable = false)
+    private User user;
 
 }

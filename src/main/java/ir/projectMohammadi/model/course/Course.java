@@ -1,6 +1,6 @@
 package ir.projectMohammadi.model.course;
 
-import ir.projectMohammadi.model.administor.Administrator;
+
 import ir.projectMohammadi.model.baseModel.Base;
 import ir.projectMohammadi.model.teacher.Teacher;
 import jakarta.persistence.*;
@@ -30,8 +30,5 @@ public class Course extends Base<Long> {
     @JoinColumn(name = "teacher")
     private Teacher teacher;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
-    @JoinColumn
-    private Administrator administrator;
 
 }

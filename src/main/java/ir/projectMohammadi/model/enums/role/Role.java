@@ -1,10 +1,13 @@
 package ir.projectMohammadi.model.enums.role;
 
+import lombok.Getter;
+
+@Getter
 public enum Role {
 
     TEACHER(0,"استاد"),
     STUDENT(1, "دانشجو"),
-    ADMINISTRATOR(2, "مدیر");
+    ADMIN(2, "مدیر");
 
 
     private final Integer Index;

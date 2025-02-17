@@ -7,15 +7,17 @@ import lombok.EqualsAndHashCode;
 @Data
 public class PersonViewModel extends BaseViewModel<Long> {
 
+
     private String firstName;
+
 
     private String lastName;
 
-    private String nationality;
-
-    private String nationalCode;
 
     private String email;
 
-    private String phoneNumber;
+
+    private String mobileNumber;
+
+    private Long userId;
 }
