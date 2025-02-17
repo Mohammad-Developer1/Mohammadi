@@ -6,11 +6,15 @@ import ir.projectMohammadi.model.user.User;
 import ir.projectMohammadi.service.user.IUserService;
 import ir.projectMohammadi.util.mapper.ModelMapper;
 import ir.projectMohammadi.web.viewModel.User.UserViewModel;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -80,6 +84,25 @@ public class UserController {
 
         return ResponseEntity.ok(userViewModels);
     }
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/users")
+    public ResponseEntity<List<User>> getAllUsers() {
+        return ResponseEntity.ok(userService.findAll());
+    }
+
+    @PreAuthorize("hasRole('TEACHER')")
+    @GetMapping("/profile")
+    public ResponseEntity<?> getTeacherProfile(Authentication authentication) {
+        String username = authentication.name();
+        Optional<User> user = userService.findByUsername(username);
+
+        if (user.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+
+        return ResponseEntity.ok(user);
+    }
+
 
 }
 

@@ -2,20 +2,31 @@ package ir.projectMohammadi.service.user.impl;
 
 import ir.projectMohammadi.model.enums.role.Role;
 import ir.projectMohammadi.model.enums.status.Status;
+import ir.projectMohammadi.model.student.Student;
+import ir.projectMohammadi.model.teacher.Teacher;
 import ir.projectMohammadi.model.user.User;
 import ir.projectMohammadi.repository.UserRepository;
+import ir.projectMohammadi.service.Student.IStudentService;
+import ir.projectMohammadi.service.teacher.ITeacherService;
 import ir.projectMohammadi.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements IUserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private IStudentService studentService;
+
+    @Autowired
+    private ITeacherService teacherService;
 
 
     @Autowired
@@ -43,10 +54,38 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public User approveUser(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (user.getStatus() == Status.ACCEPTED) {
+            throw new RuntimeException("User is already approved.");
+        }
+
         user.setStatus(Status.ACCEPTED);
-        return userRepository.save(user);
+        userRepository.save(user);
+
+        if (user.getRole() == Role.TEACHER) {
+            Teacher teacher = new Teacher();
+            teacher.setFirstName(user.getFirstName());
+            teacher.setLastName(user.getLastName());
+            teacher.setEmail(user.getEmail());
+            teacher.setMobileNumber(user.getMobileNumber());
+            teacher.setUser(user);
+            teacherService.saveAndUpdateTeacher(teacher);
+        }
+
+        if (user.getRole() == Role.STUDENT) {
+            Student student = new Student();
+            student.setFirstName(user.getFirstName());
+            student.setLastName(user.getLastName());
+            student.setEmail(user.getEmail());
+            student.setMobileNumber(user.getMobileNumber());
+            student.setUser(user);
+            studentService.saveAndUpdateStudent(student);
+        }
+        return user;
     }
+
 
     @Override
     public User rejectUser(Long userId) {
@@ -78,6 +117,16 @@ public class UserServiceImpl implements IUserService {
         } else {
             return userRepository.findAll();
         }
+    }
+
+    @Override
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 }
 
