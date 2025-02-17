@@ -9,17 +9,6 @@
             <a>course</a>
             <b>course</b>
         </field>
-        <field>
-            <a>administrator.ID</a>
-            <b>administratorId</b>
-            <a-hint>java.lang.Long</a-hint>
-            <b-hint>java.lang.Long</b-hint>
-        </field>
-        <field type="one-way">
-            <a>administrator.lastName</a>
-            <b>administratorLastName</b>
-            <a-hint>java.lang.String</a-hint>
-            <b-hint>java.lang.String</b-hint>
-        </field>
+
     </mapping>
 </mappings>

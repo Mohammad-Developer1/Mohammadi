@@ -6,6 +6,12 @@
         <class-a>ir.projectMohammadi.model.baseModel.Person</class-a>
         <class-b>ir.projectMohammadi.web.viewModel.base.PersonViewModel</class-b>
         <field>
+            <a>user.ID</a>
+            <b>userId</b>
+            <a-hint>java.lang.Long</a-hint>
+            <b-hint>java.lang.Long</b-hint>
+        </field>
+        <field>
             <a>firstName</a>
             <b>firstName</b>
             <a-hint>java.lang.String</a-hint>
@@ -18,26 +24,14 @@
             <b-hint>java.lang.String</b-hint>
         </field>
         <field>
-            <a>nationality</a>
-            <b>nationality</b>
-            <a-hint>java.lang.String</a-hint>
-            <b-hint>java.lang.String</b-hint>
-        </field>
-        <field>
-            <a>nationalCode</a>
-            <b>nationalCode</b>
-            <a-hint>java.lang.String</a-hint>
-            <b-hint>java.lang.String</b-hint>
-        </field>
-        <field>
             <a>email</a>
             <b>email</b>
             <a-hint>java.lang.String</a-hint>
             <b-hint>java.lang.String</b-hint>
         </field>
         <field>
-            <a>phoneNumber</a>
-            <b>phoneNumber</b>
+            <a>mobileNumber</a>
+            <b>mobileNumber</b>
             <a-hint>java.lang.String</a-hint>
             <b-hint>java.lang.String</b-hint>
         </field>
