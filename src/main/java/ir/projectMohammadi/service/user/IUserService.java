@@ -4,6 +4,7 @@ import ir.projectMohammadi.model.enums.role.Role;
 import ir.projectMohammadi.model.user.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IUserService {
 
@@ -16,4 +17,8 @@ public interface IUserService {
     User rejectUser(Long userId);
 
     List<User> searchUsers(Role role, String username, String firstName, String lastName);
+
+    List<User> findAll();
+
+    Optional<User> findByUsername(String username);
 }
