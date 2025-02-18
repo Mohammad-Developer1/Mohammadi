@@ -2,6 +2,7 @@ package ir.projectMohammadi.web.controller.authController;
 
 import ir.projectMohammadi.model.enums.status.Status;
 import ir.projectMohammadi.model.user.User;
+import ir.projectMohammadi.service.otp.OtpService;
 import ir.projectMohammadi.service.security.MyUserDetailsService;
 import ir.projectMohammadi.service.user.IUserService;
 import ir.projectMohammadi.util.JwtUtil;
@@ -14,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -28,6 +30,9 @@ public class AuthController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private OtpService otpService;
 
     @Autowired
     private MyUserDetailsService myUserDetailsService;
@@ -81,4 +86,59 @@ public class AuthController {
 
         return ResponseEntity.ok(jwt);
     }
+
+    @PostMapping("/forgot-password")
+    @ResponseBody
+    public ResponseEntity<String> forgotPassword(@RequestBody Map<String, String> request) {
+        String identifier = request.get("identifier");
+        Optional<User> user = userService.findByEmail(identifier);
+        if (user.isEmpty()) {
+            user = userService.findByMobileNumber(identifier);
+        }
+        if (user.isEmpty()) {
+            return ResponseEntity.badRequest().body("User not found with given email or phone number.");
+        }
+        String otp = otpService.generateOtp(identifier);
+        return ResponseEntity.ok("OTP sent successfully: " + otp);
+    }
+
+    @PostMapping("/verify-otp")
+    @ResponseBody
+    public ResponseEntity<String> verifyOtp(@RequestBody Map<String, String> request) {
+        String identifier = request.get("identifier");
+        String otp = request.get("otp");
+
+        boolean isValid = otpService.validateOtp(identifier, otp);
+        if (!isValid) {
+            return ResponseEntity.badRequest().body("Invalid OTP.");
+        }
+
+        otpService.removeOtp(identifier);
+        return ResponseEntity.ok("OTP verified. You can now reset your password.");
+    }
+
+
+    @PostMapping("/reset-password")
+    @ResponseBody
+    public ResponseEntity<String> resetPassword(@RequestBody Map<String, String> request) {
+        String identifier = request.get("identifier");
+        String newPassword = request.get("newPassword");
+
+        Optional<User> user = userService.findByEmail(identifier);
+        if (user.isEmpty()) {
+            user = userService.findByMobileNumber(identifier);
+        }
+
+        if (user.isEmpty()) {
+            return ResponseEntity.badRequest().body("User not found.");
+        }
+
+        user.get().setPassword(passwordEncoder.encode(newPassword));
+        userService.save(user.get());
+
+        return ResponseEntity.ok("Password reset successfully.");
+    }
+
+
+
 }
