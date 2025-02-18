@@ -5,13 +5,12 @@ import ir.projectMohammadi.model.teacher.Teacher;
 import ir.projectMohammadi.service.course.ICourseService;
 import ir.projectMohammadi.util.mapper.ModelMapper;
 import ir.projectMohammadi.web.viewModel.course.CourseViewModel;
-import ir.projectMohammadi.web.viewModel.student.StudentViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.stream.Collectors;
+import java.util.List;
 
 @Controller
 @RequestMapping("/api/Course")
@@ -51,27 +50,10 @@ public class CourseController {
 
 
 
-    @GetMapping("/getCourseParticipants/{courseId}")
+    @GetMapping("/getAllCourses")
     @ResponseBody
-    public CourseViewModel getCourseParticipants(@PathVariable Long courseId) {
-        Course course = courseService.getCourse(courseId);
-
-        if (course == null) {
-            throw new RuntimeException("Course not found");
-        }
-
-        CourseViewModel courseViewModel = ModelMapper.map(course, CourseViewModel.class);
-
-        if (course.getTeacher() != null) {
-            courseViewModel.setTeacherID(course.getTeacher().getID());
-            courseViewModel.setTeacherLastName(course.getTeacher().getLastName());
-        }
-
-        courseViewModel.setStudentList(course.getStudents().stream()
-                .map(student -> ModelMapper.map(student, StudentViewModel.class))
-                .collect(Collectors.toSet()));
-
-        return courseViewModel;
+    public List<CourseViewModel> getAllCourses() {
+        return ModelMapper.mapList(courseService.getAllCourse(), CourseViewModel.class);
     }
 
 

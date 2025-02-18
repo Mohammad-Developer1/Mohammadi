@@ -37,7 +37,7 @@
             <a-hint>java.lang.Long</a-hint>
             <b-hint>java.lang.Long</b-hint>
         </field>
-        <field type="one-way">
+        <field>
             <a>teacher.lastName</a>
             <b>teacherLastName</b>
             <a-hint>java.lang.String</a-hint>

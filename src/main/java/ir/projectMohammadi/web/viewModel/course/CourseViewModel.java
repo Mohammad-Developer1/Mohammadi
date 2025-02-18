@@ -1,11 +1,10 @@
 package ir.projectMohammadi.web.viewModel.course;
 
 import ir.projectMohammadi.web.viewModel.base.BaseViewModel;
-import ir.projectMohammadi.web.viewModel.student.StudentViewModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.Set;
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -23,6 +22,6 @@ public class CourseViewModel extends BaseViewModel<Long> {
 
     private String teacherLastName;
 
-    private Set<StudentViewModel> studentList;
+    private List<String> studentList;
 
 }

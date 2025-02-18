@@ -7,11 +7,15 @@ import ir.projectMohammadi.repository.course.ICourseRepository;
 import ir.projectMohammadi.repository.student.IStudentRepository;
 import ir.projectMohammadi.repository.teacher.ITeacherRepository;
 import ir.projectMohammadi.service.course.ICourseService;
+import ir.projectMohammadi.util.mapper.ModelMapper;
+import ir.projectMohammadi.web.viewModel.course.CourseViewModel;
+import ir.projectMohammadi.web.viewModel.student.StudentViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseServiceImpl implements ICourseService {
@@ -59,9 +63,34 @@ public class CourseServiceImpl implements ICourseService {
     }
 
     @Override
-    public List<Course> getAllCourse() {
-        return courseRepository.findAll();
+    public List<CourseViewModel> getAllCourse() {
+        List<Course> courses = courseRepository.findAll();
+
+        return courses.stream().map(course -> {
+            CourseViewModel courseViewModel = ModelMapper.map(course, CourseViewModel.class);
+            courseViewModel.setTitle(course.getTitle());
+            courseViewModel.setStartDate(course.getStartDate());
+            courseViewModel.setEndDate(course.getEndDate());
+            courseViewModel.setId(course.getID());
+
+            if (course.getTeacher() != null) {
+                courseViewModel.setTeacherID(course.getTeacher().getID());
+                courseViewModel.setTeacherLastName(course.getTeacher().getLastName());
+            }
+
+            if (course.getStudents() != null) {
+                // تغییر Set<StudentViewModel> به List<String> که فقط نام دانشجویان را نمایش دهد
+                List<String> studentNames = course.getStudents().stream()
+                        .map(student -> student.getFirstName() + " " + student.getLastName()) // نام و نام خانوادگی دانشجو
+                        .collect(Collectors.toList());
+
+                courseViewModel.setStudentList(studentNames);
+            }
+
+            return courseViewModel;
+        }).collect(Collectors.toList());
     }
+
 
     @Override
     public Course getCourse(Long id) {
@@ -105,7 +134,7 @@ public class CourseServiceImpl implements ICourseService {
             Course course = courseOptional.get();
             Student student = studentOptional.get();
 
-            course.getStudents().add(student);  // اضافه کردن دانشجو به لیست دوره
+            course.getStudents().add(student);
             courseRepository.save(course);
             return true;
         }
