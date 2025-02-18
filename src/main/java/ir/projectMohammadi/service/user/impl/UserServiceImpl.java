@@ -5,7 +5,7 @@ import ir.projectMohammadi.model.enums.status.Status;
 import ir.projectMohammadi.model.student.Student;
 import ir.projectMohammadi.model.teacher.Teacher;
 import ir.projectMohammadi.model.user.User;
-import ir.projectMohammadi.repository.UserRepository;
+import ir.projectMohammadi.repository.User.UserRepository;
 import ir.projectMohammadi.service.Student.IStudentService;
 import ir.projectMohammadi.service.teacher.ITeacherService;
 import ir.projectMohammadi.service.user.IUserService;

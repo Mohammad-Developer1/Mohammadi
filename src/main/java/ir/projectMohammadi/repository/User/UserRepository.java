@@ -1,4 +1,4 @@
-package ir.projectMohammadi.repository;
+package ir.projectMohammadi.repository.User;
 
 import ir.projectMohammadi.model.user.User;
 import ir.projectMohammadi.model.enums.role.Role;

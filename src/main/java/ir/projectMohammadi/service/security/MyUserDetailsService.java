@@ -2,7 +2,7 @@ package ir.projectMohammadi.service.security;
 
 
 import ir.projectMohammadi.model.user.User;
-import ir.projectMohammadi.repository.UserRepository;
+import ir.projectMohammadi.repository.User.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
