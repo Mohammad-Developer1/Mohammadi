@@ -17,15 +17,25 @@ const Signup = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const response = await fetch("http://localhost:8080/api/auth/signup", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-        });
-        const data = await response.text();
-        alert(data);
+        try {
+            const response = await fetch("http://localhost:8080/api/auth/signup", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const data = await response.text();
+            alert("Signup successful: " + data);
+        } catch (error) {
+            console.error("Error during fetch:", error);
+            alert("Signup failed. Check the console for details.");
+        }
     };
 
     return (
