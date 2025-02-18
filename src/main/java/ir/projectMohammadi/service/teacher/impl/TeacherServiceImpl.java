@@ -1,6 +1,7 @@
 package ir.projectMohammadi.service.teacher.impl;
 
 import ir.projectMohammadi.model.teacher.Teacher;
+import ir.projectMohammadi.repository.course.ICourseRepository;
 import ir.projectMohammadi.repository.teacher.ITeacherRepository;
 import ir.projectMohammadi.service.teacher.ITeacherService;
 import ir.projectMohammadi.web.viewModel.teacher.TeacherViewModel;
@@ -14,6 +15,9 @@ public class TeacherServiceImpl implements ITeacherService {
 
     @Autowired
     private ITeacherRepository teacherRepository;
+
+    @Autowired
+    private ICourseRepository courseRepository;
 
     @Override
     public Boolean saveAndUpdateTeacher(Teacher teacher) {
@@ -42,9 +46,15 @@ public class TeacherServiceImpl implements ITeacherService {
     @Override
     public Boolean deleteTeacherById(Long id) {
         if (id == null) {
-            throw new NullPointerException("Teacher id is null");
-        }else {
-            return teacherRepository.deleteTeacher(id);
+            throw new NullPointerException("Teacher ID is null");
         }
+
+        long courseCount = courseRepository.countByTeacherId(id);
+        if (courseCount > 0) {
+            throw new RuntimeException("Cannot delete teacher with assigned courses.");
+        }
+
+        return teacherRepository.deleteTeacher(id);
     }
+
 }

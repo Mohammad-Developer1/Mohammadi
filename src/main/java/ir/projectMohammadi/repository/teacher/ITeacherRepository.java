@@ -21,4 +21,5 @@ public interface ITeacherRepository extends JpaRepository<Teacher, Long> {
         return deleteTeacherById(id) > 0;
     }
 
+
 }
