@@ -1,6 +1,5 @@
 package ir.projectMohammadi.config.securityConfig;
 
-
 import ir.projectMohammadi.config.jwtRequestFilter.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -29,8 +28,8 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/**","/api/auth/login", "/api/auth/signup").permitAll()
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/auth/login", "/api/auth/signup","/api/auth/forgot-password","/api/auth/verify-otp","/api/auth/reset-password","/api/users/approve/**").permitAll()
+                        .requestMatchers("/api/users/**","/api/Course/**").hasRole("ADMIN")
                         .requestMatchers("/api/teacher/**").hasRole("TEACHER")
                         .requestMatchers("/api/student/**").hasRole("STUDENT")
                         .anyRequest().authenticated()
@@ -40,7 +39,6 @@ public class SecurityConfig {
 
         return http.build();
     }
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -52,6 +50,3 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 }
-
-
-
