@@ -5,6 +5,32 @@
     <mapping>
         <class-a>ir.projectMohammadi.model.course.Course</class-a>
         <class-b>ir.projectMohammadi.web.viewModel.course.CourseViewModel</class-b>
+
+
+        <field>
+            <a>courseCode</a>
+            <b>courseCode</b>
+            <a-hint>java.lang.String</a-hint>
+            <b-hint>java.lang.String</b-hint>
+        </field>
+        <field>
+            <a>title</a>
+            <b>title</b>
+            <a-hint>java.lang.String</a-hint>
+            <b-hint>java.lang.String</b-hint>
+        </field>
+        <field>
+            <a>startDate</a>
+            <b>startDate</b>
+            <a-hint>java.lang.String</a-hint>
+            <b-hint>java.lang.String</b-hint>
+        </field>
+        <field>
+            <a>endDate</a>
+            <b>endDate</b>
+            <a-hint>java.lang.String</a-hint>
+            <b-hint>java.lang.String</b-hint>
+        </field>
         <field>
             <a>teacher.ID</a>
             <b>teacherID</b>
@@ -14,18 +40,6 @@
         <field type="one-way">
             <a>teacher.lastName</a>
             <b>teacherLastName</b>
-            <a-hint>java.lang.String</a-hint>
-            <b-hint>java.lang.String</b-hint>
-        </field>
-        <field>
-            <a>administrator.ID</a>
-            <b>administratorId</b>
-            <a-hint>java.lang.Long</a-hint>
-            <b-hint>java.lang.Long</b-hint>
-        </field>
-        <field type="one-way">
-            <a>administrator.lastName</a>
-            <b>administratorLastName</b>
             <a-hint>java.lang.String</a-hint>
             <b-hint>java.lang.String</b-hint>
         </field>
