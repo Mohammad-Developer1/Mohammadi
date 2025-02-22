@@ -9,6 +9,8 @@ import ir.projectMohammadi.repository.User.UserRepository;
 import ir.projectMohammadi.service.Student.IStudentService;
 import ir.projectMohammadi.service.teacher.ITeacherService;
 import ir.projectMohammadi.service.user.IUserService;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,20 +19,16 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements IUserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private IStudentService studentService;
+    private final IStudentService studentService;
 
-    @Autowired
-    private ITeacherService teacherService;
+    private final ITeacherService teacherService;
 
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public User registerUser(String username, String password, String firstName, String lastName, String email, String mobileNumber, Role role) {
@@ -42,10 +40,59 @@ public class UserServiceImpl implements IUserService {
         user.setEmail(email);
         user.setMobileNumber(mobileNumber);
         user.setRole(role);
-        user.setStatus(Status.PENDING);
+        user.setStatus(Status.ACCEPTED);
 
         return userRepository.save(user);
     }
+    @Override
+    @Transactional
+    public User changeUserRoleAndUpdateInfo(Long userId, Role newRole, String firstName, String lastName, String email, String mobileNumber) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (user.getRole() == newRole) {
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setEmail(email);
+            user.setMobileNumber(mobileNumber);
+            return userRepository.save(user);
+        }
+
+        if (user.getRole() == Role.TEACHER && newRole == Role.STUDENT) {
+            teacherService.deleteTeacherByEmail(user.getEmail());
+            Student student = new Student();
+            student.setFirstName(firstName);
+            student.setLastName(lastName);
+            student.setEmail(email);
+            student.setMobileNumber(mobileNumber);
+            student.setUser(user);
+            studentService.saveAndUpdateStudent(student);
+        }
+
+        if (user.getRole() == Role.STUDENT && newRole == Role.TEACHER) {
+            studentService.deleteStudentByEmail(user.getEmail());
+            Teacher teacher = new Teacher();
+            teacher.setFirstName(firstName);
+            teacher.setLastName(lastName);
+            teacher.setEmail(email);
+            teacher.setMobileNumber(mobileNumber);
+            teacher.setUser(user);
+            teacherService.saveAndUpdateTeacher(teacher);
+        }
+
+        user.setRole(newRole);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setEmail(email);
+        user.setMobileNumber(mobileNumber);
+
+        return userRepository.save(user);
+    }
+
+
+
+
+
 
     @Override
     public List<User> getPendingUsers() {

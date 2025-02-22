@@ -10,6 +10,8 @@ public interface IUserService {
 
     User registerUser(String username, String password, String firstName, String lastName, String email, String mobileNumber, Role role);
 
+    User changeUserRoleAndUpdateInfo(Long userId, Role newRole, String firstName, String lastName, String email, String mobileNumber);
+
     List<User> getPendingUsers();
 
     User approveUser(Long userId);

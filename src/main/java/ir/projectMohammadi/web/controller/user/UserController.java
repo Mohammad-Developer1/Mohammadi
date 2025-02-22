@@ -4,10 +4,11 @@ package ir.projectMohammadi.web.controller.user;
 import ir.projectMohammadi.model.enums.role.Role;
 import ir.projectMohammadi.model.user.User;
 import ir.projectMohammadi.service.user.IUserService;
+import ir.projectMohammadi.util.ChangeRoleRequest;
 import ir.projectMohammadi.util.mapper.ModelMapper;
 import ir.projectMohammadi.web.viewModel.User.UserViewModel;
+import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,10 +20,10 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/users")
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    public IUserService userService;
+    public final IUserService userService;
 
     @PostMapping("/register")
     @ResponseBody
@@ -37,9 +38,28 @@ public class UserController {
                 user.getRole()
         );
 
+
         UserViewModel userViewModel = ModelMapper.map(newUser, UserViewModel.class);
         return ResponseEntity.ok(userViewModel);
     }
+
+    @PutMapping("/changeRoleAndUpdate")
+    @ResponseBody
+    public ResponseEntity<?> changeRoleAndUpdate(@RequestBody ChangeRoleRequest request) {
+        User updatedUser = userService.changeUserRoleAndUpdateInfo(
+                request.getUserId(),
+                request.getNewRole(),
+                request.getFirstName(),
+                request.getLastName(),
+                request.getEmail(),
+                request.getMobileNumber()
+        );
+        return ResponseEntity.ok(updatedUser);
+    }
+
+
+
+
     @GetMapping("/pending")
     @ResponseBody
     public ResponseEntity<List<UserViewModel>> getPendingUsers() {
@@ -85,7 +105,7 @@ public class UserController {
         return ResponseEntity.ok(userViewModels);
     }
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/users")
+    @GetMapping("/getAllUsers")
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(userService.findAll());
     }
