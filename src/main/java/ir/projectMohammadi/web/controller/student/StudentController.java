@@ -4,7 +4,7 @@ import ir.projectMohammadi.model.student.Student;
 import ir.projectMohammadi.service.Student.IStudentService;
 import ir.projectMohammadi.util.mapper.ModelMapper;
 import ir.projectMohammadi.web.viewModel.student.StudentViewModel;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,10 +12,11 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/student")
+@RequiredArgsConstructor
 public class StudentController {
 
-    @Autowired
-    public IStudentService studentService;
+
+    public final IStudentService studentService;
 
     @PostMapping("/saveStudent")
     @ResponseBody

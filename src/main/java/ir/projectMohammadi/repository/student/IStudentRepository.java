@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface IStudentRepository extends JpaRepository<Student, Long> {
 
@@ -19,4 +21,8 @@ public interface IStudentRepository extends JpaRepository<Student, Long> {
     default Boolean deleteStudentByID(Long id) {
         return deleteStudentById(id) > 0;
     }
+
+    void deleteByEmail(String email);
+
+    Optional<Student> findByEmail(String email);
 }

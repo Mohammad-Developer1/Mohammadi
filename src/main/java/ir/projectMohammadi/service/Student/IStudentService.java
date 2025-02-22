@@ -9,4 +9,5 @@ public interface IStudentService {
     List<Student> getAllStudent();
     Student getStudent(Long id);
     Boolean deleteStudent(Long id);
+    void deleteStudentByEmail(String email);
 }

@@ -1,18 +1,23 @@
 package ir.projectMohammadi.service.Student.impl;
 
 import ir.projectMohammadi.model.student.Student;
+import ir.projectMohammadi.repository.course.ICourseRepository;
 import ir.projectMohammadi.repository.student.IStudentRepository;
 import ir.projectMohammadi.service.Student.IStudentService;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class StudentServiceImpl implements IStudentService {
 
-    @Autowired
-    private IStudentRepository studentRepository;
+    private final IStudentRepository studentRepository;
+
+    private final ICourseRepository courseRepository;
 
     @Override
     public Boolean saveAndUpdateStudent(Student student) {
@@ -46,4 +51,16 @@ public class StudentServiceImpl implements IStudentService {
           return studentRepository.deleteStudentByID(id);
         }
     }
+    @Transactional
+    public void deleteStudentByEmail(String email) {
+        Student student = studentRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+
+        courseRepository.removeStudentFromAllCourses(student.getID());
+
+        studentRepository.delete(student);
+    }
+
+
+
 }

@@ -24,5 +24,12 @@ public class Student extends Person {
     @ManyToMany(mappedBy = "students")
     private Set<Course> courses = new HashSet<>();
 
+    public Student(String firstName, String lastName, String email, String mobileNumber) {
+        this.setFirstName(firstName);
+        this.setLastName(lastName);
+        this.setEmail(email);
+        this.setMobileNumber(mobileNumber);
+    }
+
 
 }
