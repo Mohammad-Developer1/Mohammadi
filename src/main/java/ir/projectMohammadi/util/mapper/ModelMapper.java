@@ -3,7 +3,7 @@ package ir.projectMohammadi.util.mapper;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ir.projectMohammadi.model.baseModel.Base;
+import ir.projectMohammadi.model.baseModel.BaseEntity;
 import ir.projectMohammadi.util.QueryResult.QueryResult;
 import ir.projectMohammadi.util.enumEntryDescriptor.EnumEntryDescriptor;
 import org.apache.logging.log4j.LogManager;
@@ -70,7 +70,7 @@ public class ModelMapper {
                 field.setAccessible(true);
                 Object innerObject = field.get(source);
 
-                if (innerObject instanceof Base<?>) {
+                if (innerObject instanceof BaseEntity<?>) {
                     Method[] methods = field.getType().getMethods();
                     for (Method method : methods) {
                         if (method.getName().contentEquals("getId")) {

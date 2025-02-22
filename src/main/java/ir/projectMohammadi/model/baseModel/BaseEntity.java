@@ -1,6 +1,7 @@
 package ir.projectMohammadi.model.baseModel;
 
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import lombok.AllArgsConstructor;
@@ -14,10 +15,10 @@ import java.io.Serializable;
 @MappedSuperclass
 @AllArgsConstructor
 @NoArgsConstructor
-public abstract class Base<T> implements Serializable {
+public abstract class BaseEntity<T> implements Serializable {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private T ID;
 
 

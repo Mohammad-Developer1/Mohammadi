@@ -1,6 +1,6 @@
 package ir.projectMohammadi.model.course;
 
-import ir.projectMohammadi.model.baseModel.Base;
+import ir.projectMohammadi.model.baseModel.BaseEntity;
 import ir.projectMohammadi.model.student.Student;
 import ir.projectMohammadi.model.teacher.Teacher;
 import jakarta.persistence.*;
@@ -9,9 +9,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -19,7 +17,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "COURSE")
-public class Course extends Base<Long> {
+public class Course extends BaseEntity<Long> {
 
     @Column(unique = true, nullable = false)
     private String courseCode;

@@ -1,6 +1,6 @@
 package ir.projectMohammadi.model.user;
 
-import ir.projectMohammadi.model.baseModel.Base;
+import ir.projectMohammadi.model.baseModel.BaseEntity;
 import ir.projectMohammadi.model.enums.role.Role;
 import ir.projectMohammadi.model.enums.status.Status;
 import jakarta.persistence.*;
@@ -12,7 +12,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users")
-public class User extends Base<Long> {
+public class User extends BaseEntity<Long> {
 
     @Column(nullable = false, unique = true)
     private String username;

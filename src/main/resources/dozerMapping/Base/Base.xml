@@ -3,7 +3,7 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://dozer.sourceforge.net https://dozer.sourceforge.net/schema/beanmapping.xsd">
     <mapping>
-        <class-a>ir.projectMohammadi.model.baseModel.Base</class-a>
+        <class-a>ir.projectMohammadi.model.baseModel.BaseEntity</class-a>
         <class-b>ir.projectMohammadi.web.viewModel.base.BaseViewModel</class-b>
         <field>
             <a>ID</a>
