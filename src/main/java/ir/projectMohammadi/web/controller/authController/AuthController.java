@@ -7,8 +7,8 @@ import ir.projectMohammadi.service.security.MyUserDetailsService;
 import ir.projectMohammadi.service.user.IUserService;
 import ir.projectMohammadi.util.ApiResponse;
 import ir.projectMohammadi.util.JwtUtil;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -34,7 +34,7 @@ public class AuthController {
 
     @PostMapping("/signup")
     @ResponseBody
-    public ResponseEntity<ApiResponse> signup(@RequestBody User user) {
+    public ResponseEntity<ApiResponse> signup(@Valid @RequestBody User user) {
         if (userService.findByUsername(user.getUsername()).isPresent()) {
             return ResponseEntity.badRequest().body(new ApiResponse(false, "Username already exists."));
         }
@@ -129,11 +129,4 @@ public class AuthController {
         return ResponseEntity.ok(new ApiResponse(true, "Password reset successfully."));
     }
 
-    /**
-     * هندل کردن تمامی استثناها برای ارسال خروجی JSON
-     */
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse> handleException(Exception ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(false, "An error occurred: " + ex.getMessage()));
-    }
 }
