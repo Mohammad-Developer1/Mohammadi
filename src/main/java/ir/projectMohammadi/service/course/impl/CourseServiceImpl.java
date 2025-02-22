@@ -10,6 +10,7 @@ import ir.projectMohammadi.service.course.ICourseService;
 import ir.projectMohammadi.util.mapper.ModelMapper;
 import ir.projectMohammadi.web.viewModel.course.CourseViewModel;
 import ir.projectMohammadi.web.viewModel.student.StudentViewModel;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,16 +19,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class CourseServiceImpl implements ICourseService {
 
-    @Autowired
-    private ICourseRepository courseRepository;
+    private final ICourseRepository courseRepository;
 
-    @Autowired
-    private ITeacherRepository teacherRepository;
+    private final ITeacherRepository teacherRepository;
 
-    @Autowired
-    private IStudentRepository studentRepository;
+    private final IStudentRepository studentRepository;
 
     @Override
     public Boolean saveCourse(Course course) {
@@ -79,9 +78,8 @@ public class CourseServiceImpl implements ICourseService {
             }
 
             if (course.getStudents() != null) {
-                // تغییر Set<StudentViewModel> به List<String> که فقط نام دانشجویان را نمایش دهد
                 List<String> studentNames = course.getStudents().stream()
-                        .map(student -> student.getFirstName() + " " + student.getLastName()) // نام و نام خانوادگی دانشجو
+                        .map(student -> student.getFirstName() + " " + student.getLastName())
                         .collect(Collectors.toList());
 
                 courseViewModel.setStudentList(studentNames);

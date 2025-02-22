@@ -5,7 +5,7 @@ import ir.projectMohammadi.model.teacher.Teacher;
 import ir.projectMohammadi.service.course.ICourseService;
 import ir.projectMohammadi.util.mapper.ModelMapper;
 import ir.projectMohammadi.web.viewModel.course.CourseViewModel;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -14,10 +14,11 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/api/Course")
+@RequiredArgsConstructor
 public class CourseController {
 
-    @Autowired
-    private ICourseService courseService;
+
+    private final ICourseService courseService;
 
 
     @PostMapping("/saveCourse")
