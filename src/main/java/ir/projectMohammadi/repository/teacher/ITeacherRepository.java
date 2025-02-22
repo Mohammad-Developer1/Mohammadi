@@ -22,4 +22,5 @@ public interface ITeacherRepository extends JpaRepository<Teacher, Long> {
     }
 
 
+    void deleteByEmail(String email);
 }

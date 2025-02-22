@@ -11,10 +11,22 @@ import lombok.NoArgsConstructor;
 import java.util.Set;
 
 
-@EqualsAndHashCode(callSuper = true)
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Data
 @Table(name = "TEACHER")
 public class Teacher extends Person {
 
+    @OneToMany(mappedBy = "teacher", fetch = FetchType.LAZY)
+    private Set<Course> courses;
+
+
+    public Teacher(String firstName, String lastName, String email, String mobileNumber) {
+        super.setFirstName(firstName);
+        super.setLastName(lastName);
+        super.setEmail(email);
+        super.setMobileNumber(mobileNumber);
+    }
 }
+

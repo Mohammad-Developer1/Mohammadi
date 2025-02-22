@@ -10,6 +10,6 @@ public interface ITeacherService {
     List<Teacher> getAllTeacher();
     Teacher getTeacher(Long id);
     Boolean deleteTeacherById(Long id);
-
+    void deleteTeacherByEmail(String email);
 
 }

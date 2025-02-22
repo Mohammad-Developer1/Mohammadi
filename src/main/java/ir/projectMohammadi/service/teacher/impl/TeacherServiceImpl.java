@@ -4,20 +4,21 @@ import ir.projectMohammadi.model.teacher.Teacher;
 import ir.projectMohammadi.repository.course.ICourseRepository;
 import ir.projectMohammadi.repository.teacher.ITeacherRepository;
 import ir.projectMohammadi.service.teacher.ITeacherService;
-import ir.projectMohammadi.web.viewModel.teacher.TeacherViewModel;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Repository
+@Service
+@RequiredArgsConstructor
 public class TeacherServiceImpl implements ITeacherService {
 
-    @Autowired
-    private ITeacherRepository teacherRepository;
 
-    @Autowired
-    private ICourseRepository courseRepository;
+    private final ITeacherRepository teacherRepository;
+
+    private final ICourseRepository courseRepository;
+
 
     @Override
     public Boolean saveAndUpdateTeacher(Teacher teacher) {
@@ -56,5 +57,9 @@ public class TeacherServiceImpl implements ITeacherService {
 
         return teacherRepository.deleteTeacher(id);
     }
+    public void deleteTeacherByEmail(String email) {
+        teacherRepository.deleteByEmail(email);
+    }
+
 
 }
