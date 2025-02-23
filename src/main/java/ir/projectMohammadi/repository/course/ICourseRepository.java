@@ -22,4 +22,8 @@ public interface ICourseRepository extends JpaRepository<Course, Long> {
     @Query(value = "DELETE FROM course_student WHERE student_id = :studentId", nativeQuery = true)
     void removeStudentFromAllCourses(@Param("studentId") Long studentId);
 
+    @Query("SELECT c.courseCode FROM Course c ORDER BY c.id DESC LIMIT 1")
+    String findLastCourseCode();
+
+
 }

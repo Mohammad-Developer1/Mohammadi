@@ -13,16 +13,11 @@ import java.util.Optional;
 @Repository
 public interface IStudentRepository extends JpaRepository<Student, Long> {
 
-    @Transactional
-    @Modifying
-    @Query("DELETE FROM Student s WHERE s.ID = :id")
-    int  deleteStudentById(@Param("id") Long id);
 
-    default Boolean deleteStudentByID(Long id) {
-        return deleteStudentById(id) > 0;
-    }
+    Boolean  deleteStudentByID(@Param("id") Long id);
 
     void deleteByEmail(String email);
 
     Optional<Student> findByEmail(String email);
+
 }

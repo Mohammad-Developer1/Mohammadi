@@ -33,13 +33,27 @@ public class CourseServiceImpl implements ICourseService {
         if (course == null) {
             throw new NullPointerException("Course is null");
         }
-        if (course.getTeacher() == null || course.getTeacher().getID() == null) {
-            throw new IllegalArgumentException("Teacher ID is missing in course");
+        if (course.getTeacher() == null) {
+            course.setTeacher(null);
         }
+        String lastCourseCode = courseRepository.findLastCourseCode();
+
+        String newCourseCode = generateNextCourseCode(lastCourseCode);
+        course.setCourseCode(newCourseCode);
+
         courseRepository.save(course);
         return true;
     }
 
+    private String generateNextCourseCode(String lastCourseCode) {
+        if (lastCourseCode == null || lastCourseCode.isEmpty()) {
+            return "CES001";
+        }
+        String numericPart = lastCourseCode.substring(3);
+        int number = Integer.parseInt(numericPart);
+        number++;
+        return String.format("CES%03d", number);
+    }
 
     @Override
     public Boolean updateCourse(Long id, Course updatedCourse) {

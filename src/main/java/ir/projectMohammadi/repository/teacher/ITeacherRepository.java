@@ -15,12 +15,7 @@ public interface ITeacherRepository extends JpaRepository<Teacher, Long> {
     @Transactional
     @Modifying
     @Query("DELETE FROM Teacher t WHERE t.ID = :id")
-    int  deleteTeacherById(@Param("id") Long id);
-
-    default Boolean deleteTeacher(Long id) {
-        return deleteTeacherById(id) > 0;
-    }
-
+    Boolean deleteTeacher(@Param("id") Long id);
 
     void deleteByEmail(String email);
 }

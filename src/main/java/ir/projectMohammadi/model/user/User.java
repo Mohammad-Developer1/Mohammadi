@@ -4,8 +4,10 @@ import ir.projectMohammadi.model.baseModel.BaseEntity;
 import ir.projectMohammadi.model.enums.role.Role;
 import ir.projectMohammadi.model.enums.status.Status;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -18,7 +20,6 @@ public class User extends BaseEntity<Long> {
     @Column(nullable = false, unique = true)
     private String username;
 
-    @Size(min = 8, max = 20, message = "Password must be between 8 and 20 characters.")
     @Column(nullable = false)
     private String password;
 

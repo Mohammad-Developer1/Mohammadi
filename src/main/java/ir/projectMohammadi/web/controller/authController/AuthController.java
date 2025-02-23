@@ -7,6 +7,7 @@ import ir.projectMohammadi.service.security.MyUserDetailsService;
 import ir.projectMohammadi.service.user.IUserService;
 import ir.projectMohammadi.util.ApiResponse;
 import ir.projectMohammadi.util.JwtUtil;
+import ir.projectMohammadi.web.viewModel.User.UserViewModel;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -34,23 +36,44 @@ public class AuthController {
 
     @PostMapping("/signup")
     @ResponseBody
-    public ResponseEntity<ApiResponse> signup(@Valid @RequestBody User user) {
+    public ResponseEntity<ApiResponse> signup(@Valid @RequestBody User user, BindingResult result) {
+
         if (userService.findByUsername(user.getUsername()).isPresent()) {
-            return ResponseEntity.badRequest().body(new ApiResponse(false, "Username already exists."));
+            return ResponseEntity.badRequest().body(new ApiResponse(false, "Username already exists.", null));
         }
         if (userService.findByEmail(user.getEmail()).isPresent()) {
-            return ResponseEntity.badRequest().body(new ApiResponse(false, "Email already exists."));
+            return ResponseEntity.badRequest().body(new ApiResponse(false, "Email already exists.", null));
         }
+        if (user.getPassword().length() < 8 || user.getPassword().length() > 20) {
+            return ResponseEntity.badRequest().body(new ApiResponse(false, "Password must be between 8 and 20 characters", null));
+        }
+
         if (userService.findByMobileNumber(user.getMobileNumber()).isPresent()) {
-            return ResponseEntity.badRequest().body(new ApiResponse(false, "Mobile number already exists."));
+            return ResponseEntity.badRequest().body(new ApiResponse(false, "Mobile number already exists.", null));
+        }
+        if (result.hasErrors()) {
+            String errorMessage = result.getAllErrors().get(0).getDefaultMessage();
+            return ResponseEntity.badRequest().body(new ApiResponse(false, errorMessage, null));
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setStatus(Status.PENDING);
         userService.save(user);
 
-        return ResponseEntity.ok(new ApiResponse(true, "Signup request sent. Waiting for admin approval."));
+
+        UserViewModel userViewModel = new UserViewModel();
+        userViewModel.setId(user.getID());
+        userViewModel.setFirstName(user.getFirstName());
+        userViewModel.setLastName(user.getLastName());
+        userViewModel.setRole(user.getRole());
+        userViewModel.setStatus(user.getStatus());
+
+        return ResponseEntity.ok(new ApiResponse(true, "Signup request sent. Waiting for admin approval.", userViewModel));
     }
+
+
+
+
 
     @PostMapping("/login")
     @ResponseBody
@@ -128,5 +151,6 @@ public class AuthController {
 
         return ResponseEntity.ok(new ApiResponse(true, "Password reset successfully."));
     }
+
 
 }

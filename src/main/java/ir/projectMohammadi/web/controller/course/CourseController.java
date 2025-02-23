@@ -29,9 +29,7 @@ public class CourseController {
                         .body(new ApiResponse(false, "A teacher cannot be assigned at course creation."));
             }
             Course course = ModelMapper.map(courseViewModel, Course.class);
-
             course.setTeacher(null);
-
             boolean success = courseService.saveCourse(course);
             if (success) {
                 return ResponseEntity.ok(new ApiResponse(true, "Course saved successfully", course));
@@ -44,6 +42,8 @@ public class CourseController {
                     .body(new ApiResponse(false, "Error saving course: " + e.getMessage()));
         }
     }
+
+
 
 
 

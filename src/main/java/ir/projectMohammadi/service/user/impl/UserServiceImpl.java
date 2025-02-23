@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class UserServiceImpl implements IUserService {
 
@@ -30,6 +31,15 @@ public class UserServiceImpl implements IUserService {
 
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional
+    public User signUp(User user) {
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new RuntimeException("Username already exists!");
+        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
+    }
+
     @Override
     public User registerUser(String username, String password, String firstName, String lastName, String email, String mobileNumber, Role role) {
         User user = new User();
@@ -40,10 +50,11 @@ public class UserServiceImpl implements IUserService {
         user.setEmail(email);
         user.setMobileNumber(mobileNumber);
         user.setRole(role);
-        user.setStatus(Status.ACCEPTED);
+        user.setStatus(Status.PENDING);
 
         return userRepository.save(user);
     }
+
     @Override
     @Transactional
     public User changeUserRoleAndUpdateInfo(Long userId, Role newRole, String firstName, String lastName, String email, String mobileNumber) {
@@ -190,5 +201,7 @@ public class UserServiceImpl implements IUserService {
     public void save(User user) {
         userRepository.save(user);
     }
+
+
 }
 

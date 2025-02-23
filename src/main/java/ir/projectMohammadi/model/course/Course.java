@@ -19,6 +19,7 @@ import java.util.List;
 @Table(name = "COURSE")
 public class Course extends BaseEntity<Long> {
 
+
     @Column(unique = true, nullable = false)
     private String courseCode;
 
@@ -32,7 +33,7 @@ public class Course extends BaseEntity<Long> {
     private String endDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "teacher_id")
+    @JoinColumn(name = "teacher_id", nullable = true)
     private Teacher teacher;
 
     @ManyToMany(fetch = FetchType.LAZY)
