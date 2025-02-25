@@ -28,16 +28,19 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/login", "/api/auth/signup","/api/auth/forgot-password","/api/auth/verify-otp","/api/auth/reset-password","/api/users/approve/**").permitAll()
-                        .requestMatchers("/api/users/**","/api/Course/**","/student/**","/teacher/**").hasRole("ADMIN")
-                        .anyRequest().authenticated()
+                .authorizeHttpRequests(auth -> {
+                        auth.requestMatchers("/api/auth/**", "/api/users/approve/**").permitAll();
+                        auth.requestMatchers( "/api/Course/getMyCourses","/api/exams/getExamsByCourseId/**", "/teacher/**","/api/exams/create").hasRole("TEACHER");
+                        auth.requestMatchers("/api/users/**", "/api/Course/**", "/student/**", "/teacher/**").hasRole("ADMIN");
+                        auth.anyRequest().authenticated();
+                    }
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
