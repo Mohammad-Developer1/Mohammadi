@@ -8,11 +8,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface ICourseRepository extends JpaRepository<Course, Long> {
 
-    @Query("SELECT COUNT(c) FROM Course c WHERE c.teacher.ID = :teacherId")
-    long countByTeacherId(@Param("teacherId") Long teacherId);
+
+    long countByTeacherID(@Param("teacherId") Long teacherId);
 
 
     boolean existsByCourseCode(String courseCode);
@@ -24,6 +26,11 @@ public interface ICourseRepository extends JpaRepository<Course, Long> {
 
     @Query("SELECT c.courseCode FROM Course c ORDER BY c.id DESC LIMIT 1")
     String findLastCourseCode();
+
+    List<Course> findByTeacher_User_Username(String username);
+
+    @Query("SELECT c FROM Course c LEFT JOIN FETCH c.students LEFT JOIN FETCH c.exams WHERE c.teacher.id = :teacherId")
+    List<Course> findByTeacherWithDetails(@Param("teacherId") Long teacherId);
 
 
 }

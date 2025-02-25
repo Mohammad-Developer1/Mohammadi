@@ -1,5 +1,6 @@
 package ir.projectMohammadi.service.course.impl;
 
+import ir.projectMohammadi.config.securityUtil.SecurityUtil;
 import ir.projectMohammadi.model.course.Course;
 import ir.projectMohammadi.model.student.Student;
 import ir.projectMohammadi.model.teacher.Teacher;
@@ -9,9 +10,7 @@ import ir.projectMohammadi.repository.teacher.ITeacherRepository;
 import ir.projectMohammadi.service.course.ICourseService;
 import ir.projectMohammadi.util.mapper.ModelMapper;
 import ir.projectMohammadi.web.viewModel.course.CourseViewModel;
-import ir.projectMohammadi.web.viewModel.student.StudentViewModel;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -153,5 +152,24 @@ public class CourseServiceImpl implements ICourseService {
         return false;
     }
 
+
+    @Override
+    public Optional<Course> findById(Long courseId) {
+        return courseRepository.findById(courseId);
+    }
+
+    @Override
+    public Course getCourseById(Long courseId) {
+        return courseRepository.findById(courseId).get();
+    }
+    @Override
+    public List<Course> getCoursesForLoggedInTeacher() {
+        String username = SecurityUtil.getLoggedInUsername();
+
+        Teacher teacher = teacherRepository.findByUser_Username(username)
+                .orElseThrow(() -> new RuntimeException("Teacher not found"));
+
+        return courseRepository.findByTeacherWithDetails(teacher.getID());
+    }
 
 }

@@ -1,27 +1,38 @@
 package ir.projectMohammadi.web.viewModel.course;
 
 import ir.projectMohammadi.web.viewModel.base.BaseViewModel;
+import ir.projectMohammadi.web.viewModel.exam.ExamViewModel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CourseViewModel extends BaseViewModel<Long> {
 
-    private String courseCode; 
+        private Long id;
 
-    private String title;
+        private String courseCode;
 
-    private String startDate;
+        private String title;
 
-    private String endDate;
+        private String startDate;
 
-    private Long teacherID;
+        private String endDate;
 
-    private String teacherLastName;
+        private Long teacherID;
 
-    private List<String> studentList;
+        private String teacherLastName;
 
-}
+        private List<String> studentList;
+
+        private List<ExamViewModel> examList;
+    }
+
+
+

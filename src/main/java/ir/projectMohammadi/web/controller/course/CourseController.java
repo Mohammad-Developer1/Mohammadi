@@ -5,12 +5,15 @@ import ir.projectMohammadi.service.course.ICourseService;
 import ir.projectMohammadi.util.ApiResponse;
 import ir.projectMohammadi.util.mapper.ModelMapper;
 import ir.projectMohammadi.web.viewModel.course.CourseViewModel;
+import ir.projectMohammadi.web.viewModel.exam.ExamViewModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/Course")
@@ -138,5 +141,49 @@ public class CourseController {
                     .body(new ApiResponse(false, "Error adding student: " + e.getMessage()));
         }
     }
+
+    @GetMapping("/getMyCourses")
+    @ResponseBody
+    public ResponseEntity<List<CourseViewModel>> getMyCourses() {
+        List<Course> courses = courseService.getCoursesForLoggedInTeacher();
+        List<CourseViewModel> courseViewModels = courses.stream().map(course -> {
+            CourseViewModel courseViewModel = ModelMapper.map(course, CourseViewModel.class);
+
+            // مقداردهی اطلاعات استاد
+            if (course.getTeacher() != null) {
+                courseViewModel.setTeacherID(course.getTeacher().getID());
+                courseViewModel.setTeacherLastName(course.getTeacher().getLastName());
+            }
+
+            // مقداردهی لیست دانشجوها
+            if (course.getStudents() != null) {
+                List<String> studentNames = course.getStudents().stream()
+                        .map(student -> student.getFirstName() + " " + student.getLastName())
+                        .collect(Collectors.toList());
+                courseViewModel.setStudentList(studentNames);
+            }
+
+            // مقداردهی فقط عنوان و توضیحات آزمون‌ها
+            if (course.getExams() != null) {
+                List<ExamViewModel> examList = course.getExams().stream()
+                        .map(exam -> {
+                            ExamViewModel examViewModel = new ExamViewModel();
+                            examViewModel.setTitle(exam.getTitle());
+                            examViewModel.setDescription(exam.getDescription());
+                            return examViewModel;
+                        })
+                        .collect(Collectors.toList());
+                courseViewModel.setExamList(examList);
+            } else {
+                courseViewModel.setExamList(new ArrayList<>());
+            }
+
+            return courseViewModel;
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.ok(courseViewModels);
+    }
+
+
 
 }

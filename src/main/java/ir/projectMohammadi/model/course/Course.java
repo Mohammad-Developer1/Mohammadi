@@ -1,6 +1,7 @@
 package ir.projectMohammadi.model.course;
 
 import ir.projectMohammadi.model.baseModel.BaseEntity;
+import ir.projectMohammadi.model.exam.Exam;
 import ir.projectMohammadi.model.student.Student;
 import ir.projectMohammadi.model.teacher.Teacher;
 import jakarta.persistence.*;
@@ -10,6 +11,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -35,6 +37,9 @@ public class Course extends BaseEntity<Long> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id", nullable = true)
     private Teacher teacher;
+
+    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
+    private Set<Exam> exams;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
