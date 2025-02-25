@@ -50,7 +50,7 @@ public class TeacherServiceImpl implements ITeacherService {
             throw new NullPointerException("Teacher ID is null");
         }
 
-        long courseCount = courseRepository.countByTeacherId(id);
+        long courseCount = courseRepository.countByTeacherID(id);
         if (courseCount > 0) {
             throw new RuntimeException("Cannot delete teacher with assigned courses.");
         }

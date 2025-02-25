@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface ITeacherRepository extends JpaRepository<Teacher, Long> {
 
@@ -18,4 +20,7 @@ public interface ITeacherRepository extends JpaRepository<Teacher, Long> {
     Boolean deleteTeacher(@Param("id") Long id);
 
     void deleteByEmail(String email);
+
+    Optional<Teacher> findByUser_Username(String username);
+
 }
