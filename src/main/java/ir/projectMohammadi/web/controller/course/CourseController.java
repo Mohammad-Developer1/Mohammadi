@@ -149,13 +149,12 @@ public class CourseController {
         List<CourseViewModel> courseViewModels = courses.stream().map(course -> {
             CourseViewModel courseViewModel = ModelMapper.map(course, CourseViewModel.class);
 
-            // مقداردهی اطلاعات استاد
+
             if (course.getTeacher() != null) {
                 courseViewModel.setTeacherID(course.getTeacher().getID());
                 courseViewModel.setTeacherLastName(course.getTeacher().getLastName());
             }
 
-            // مقداردهی لیست دانشجوها
             if (course.getStudents() != null) {
                 List<String> studentNames = course.getStudents().stream()
                         .map(student -> student.getFirstName() + " " + student.getLastName())
@@ -163,7 +162,6 @@ public class CourseController {
                 courseViewModel.setStudentList(studentNames);
             }
 
-            // مقداردهی فقط عنوان و توضیحات آزمون‌ها
             if (course.getExams() != null) {
                 List<ExamViewModel> examList = course.getExams().stream()
                         .map(exam -> {

@@ -4,6 +4,8 @@ import ir.projectMohammadi.model.course.Course;
 import ir.projectMohammadi.model.exam.Exam;
 import ir.projectMohammadi.service.course.ICourseService;
 import ir.projectMohammadi.service.exam.ExamService;
+import ir.projectMohammadi.util.ApiResponse;
+import ir.projectMohammadi.util.mapper.ModelMapper;
 import ir.projectMohammadi.web.viewModel.exam.ExamViewModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -39,22 +41,31 @@ public class ExamController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Error: " + e.getMessage());
         }
     }
+    @PutMapping("/update/{examId}")
+    @ResponseBody
+    public ResponseEntity<ApiResponse> updateExam(@PathVariable Long examId, @RequestBody ExamViewModel examViewModel) {
+        try {
+            Exam updatedExam = examService.updateExam(examId, examViewModel);
 
+            ExamViewModel updatedExamViewModel = ModelMapper.map(updatedExam, ExamViewModel.class);
+            updatedExamViewModel.setCourseId(updatedExam.getCourse().getID());
 
-    // دریافت تمام آزمون‌های یک دوره که توسط معلم لاگین‌شده ایجاد شده‌اند
-    @GetMapping("/by-course/{courseId}")
+            return ResponseEntity.ok(new ApiResponse(true, "Exam updated successfully.", updatedExamViewModel));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new ApiResponse(false, e.getMessage(), null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse(false, "Error updating exam: " + e.getMessage(), null));
+        }
+    }
+
+    @GetMapping("/getExamsByCourseId/{courseId}")
     @ResponseBody
     public ResponseEntity<List<Exam>> getExamsByCourse(@PathVariable Long courseId) {
         return ResponseEntity.ok(examService.getExamsByCourse(courseId));
     }
 
-
-
-    @GetMapping("/getExamsByCourseId/{courseId}")
-    @ResponseBody
-    public ResponseEntity<List<ExamViewModel>> getExamsByCourseId(@PathVariable Long courseId) {
-        return ResponseEntity.ok(examService.getExamsByCourseId(courseId));
-    }
 
     @DeleteMapping("/delete/{id}")
     @ResponseBody

@@ -48,20 +48,6 @@ public class ExamServiceImpl implements ExamService  {
                 .collect(Collectors.toList());
     }
 
-
-    @Override
-    public List<ExamViewModel> getExamsByCourseId(Long courseId) {
-        List<Exam> exams = examRepository.findByCourse_ID(courseId);
-        return exams.stream().map(exam -> new ExamViewModel(
-                exam.getTitle(),
-                exam.getDescription(),
-                exam.getDuration(),
-                exam.getStartDate(),
-                exam.getStartTime(),
-                exam.getID()
-        )).collect(Collectors.toList());
-    }
-
     @Override
     public void deleteExam(Long examId) {
         if (!examRepository.existsById(examId)) {
@@ -69,6 +55,27 @@ public class ExamServiceImpl implements ExamService  {
         }
         examRepository.deleteById(examId);
     }
+
+    @Override
+    public Exam updateExam(Long examId, ExamViewModel examViewModel) {
+        Exam existingExam = examRepository.findById(examId)
+                .orElseThrow(() -> new RuntimeException("Exam not found"));
+
+        String username = SecurityUtil.getLoggedInUsername();
+        if (!existingExam.getCourse().getTeacher().getUser().getUsername().equals(username)) {
+            throw new RuntimeException("You are not authorized to edit this exam.");
+        }
+
+        existingExam.setTitle(examViewModel.getTitle());
+        existingExam.setDescription(examViewModel.getDescription());
+        existingExam.setDuration(examViewModel.getDuration());
+        existingExam.setStartDate(examViewModel.getStartDate());
+        existingExam.setStartTime(examViewModel.getStartTime());
+
+        return examRepository.save(existingExam);
+    }
+
+
 }
 
 

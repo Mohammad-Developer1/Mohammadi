@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ExamService {
     Exam createExam(Exam exam);
-    List<ExamViewModel> getExamsByCourseId(Long courseId);
     void deleteExam(Long examId);
     List<Exam> getExamsByCourse(Long courseId);
+    Exam updateExam(Long examId, ExamViewModel examViewModel);
 }
