@@ -91,6 +91,21 @@ public class QuestionController {
         }
     }
 
+    @DeleteMapping("/deleteOption")
+    @ResponseBody
+    public ResponseEntity<ApiResponse> deleteQuestionOption(
+            @RequestParam Long optionId,
+            @RequestParam Long teacherId) {
+
+        try {
+            questionService.deleteQuestionOption(optionId, teacherId);
+            return ResponseEntity.ok(new ApiResponse(true, "Option deleted successfully"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse(false, "Error deleting option: " + e.getMessage()));
+        }
+    }
+
 
 
 

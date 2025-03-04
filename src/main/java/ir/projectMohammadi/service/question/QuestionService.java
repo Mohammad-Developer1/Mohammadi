@@ -28,5 +28,8 @@ public interface QuestionService {
 
     void deleteQuestion(Long questionId, Long teacherId);
 
+    void deleteQuestionOption(Long optionId, Long teacherId);
+
+
 }
 
