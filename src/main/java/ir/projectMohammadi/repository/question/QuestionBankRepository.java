@@ -7,9 +7,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface QuestionBankRepository extends JpaRepository<QuestionBank, Long> {
     List<QuestionBank> findByCourse(Course course); // دریافت سوالات یک دوره خاص
     boolean existsByCourseAndQuestion(Course course, Question question); // بررسی وجود یک سوال در بانک سوالات دوره
+
+    Optional<QuestionBank> findByQuestion(Question updatedQuestion);
+
+    void deleteByQuestion(Question question);
 }

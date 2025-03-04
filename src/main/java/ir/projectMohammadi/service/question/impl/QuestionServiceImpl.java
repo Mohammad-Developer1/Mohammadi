@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -62,21 +63,101 @@ public class QuestionServiceImpl implements QuestionService {
 
         // بررسی اینکه آیا سوال از قبل در بانک سوالات وجود دارد یا نه
         boolean exists = questionBankRepository.existsByCourseAndQuestion(course, savedQuestion);
-        System.out.println(" بررسی سوال در بانک سوالات: " + exists);
+        System.out.println("🔍 بررسی سوال در بانک سوالات: " + exists);
 
         // اگر سوال در بانک سوالات نبود، اضافه شود
         if (!exists) {
             QuestionBank questionBank = new QuestionBank();
+            questionBank.setTitle(title); // مقداردهی تایتل بانک سوالات
             questionBank.setCourse(course);
             questionBank.setQuestion(savedQuestion);
             questionBankRepository.save(questionBank);
-            System.out.println(" سوال در بانک سوالات اضافه شد.");
+            System.out.println("✅ سوال در بانک سوالات اضافه شد.");
         } else {
-            System.out.println(" سوال از قبل در بانک سوالات موجود است.");
+            System.out.println("⚠ سوال از قبل در بانک سوالات موجود است.");
         }
 
         return savedQuestion;
     }
+
+    @Override
+    @Transactional
+    public Question updateQuestion(Long questionId, String newTitle, String newDescription, Long teacherId) {
+        Question question = questionRepository.findById(questionId)
+                .orElseThrow(() -> new RuntimeException("Question not found"));
+
+        // بررسی اینکه استاد فقط سوالات خودش را ویرایش کند
+        if (!question.getTeacher().getID().equals(teacherId)) {
+            throw new RuntimeException("You can only edit your own questions.");
+        }
+
+        // بروزرسانی اطلاعات سوال
+        question.setTitle(newTitle);
+        question.setDescription(newDescription);
+
+        Question updatedQuestion = questionRepository.save(question);
+
+        // اگر این سوال در بانک سوالات وجود دارد، اطلاعات آن را هم بروز کنیم
+        Optional<QuestionBank> questionBank = questionBankRepository.findByQuestion(updatedQuestion);
+        questionBank.ifPresent(qb -> {
+            qb.setTitle(newTitle);
+            questionBankRepository.save(qb);
+        });
+
+        return updatedQuestion;
+    }
+
+
+    @Override
+    @Transactional
+    public QuestionOption updateQuestionOption(Long optionId, String newText, boolean newIsCorrect, Long teacherId) {
+        QuestionOption option = questionOptionRepository.findById(optionId)
+                .orElseThrow(() -> new RuntimeException("Option not found"));
+
+        // بررسی اینکه استاد فقط گزینه‌های سوالات خودش را ویرایش کند
+        if (!option.getQuestion().getTeacher().getID().equals(teacherId)) {
+            throw new RuntimeException("You can only edit options for your own questions.");
+        }
+
+        // بروزرسانی اطلاعات گزینه
+        option.setText(newText);
+        option.setCorrect(newIsCorrect);
+
+        return questionOptionRepository.save(option);
+    }
+
+
+    @Override
+    @Transactional
+    public void deleteQuestion(Long questionId, Long teacherId) {
+        Question question = questionRepository.findById(questionId)
+                .orElseThrow(() -> new RuntimeException("Question not found"));
+
+        // بررسی اینکه استاد فقط سوالات خودش را حذف کند
+        if (!question.getTeacher().getID().equals(teacherId)) {
+            throw new RuntimeException("You can only delete your own questions.");
+        }
+
+        // بررسی اینکه آیا سوال در آزمون‌ها استفاده شده است
+        boolean isUsedInExam = examQuestionRepository.existsByQuestion(question);
+        if (isUsedInExam) {
+            throw new RuntimeException("This question is used in an exam and cannot be deleted.");
+        }
+
+        // اگر سوال چندگزینه‌ای است، گزینه‌های آن را حذف کن
+        if (question instanceof MultipleChoiceQuestion) {
+            questionOptionRepository.deleteByQuestion((MultipleChoiceQuestion) question);
+        }
+
+        // حذف از بانک سوالات (اگر وجود داشته باشد)
+        questionBankRepository.deleteByQuestion(question);
+
+        // حذف خود سوال
+        questionRepository.delete(question);
+    }
+
+
+
 
 
 

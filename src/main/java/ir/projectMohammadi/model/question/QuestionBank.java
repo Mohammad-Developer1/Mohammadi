@@ -14,11 +14,15 @@ import lombok.NoArgsConstructor;
 @Table(name = "QUESTION_BANK")
 public class QuestionBank extends BaseEntity<Long> {
 
+    @Column(nullable = false)
+    private String title;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id", nullable = false)
-    private Course course; // دوره‌ای که این سوال به آن تعلق دارد
+    private Course course;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id", nullable = false, unique = true)
-    private Question question; // سوالی که در بانک سوالات این دوره ذخیره شده است
+    private Question question;
 }
+

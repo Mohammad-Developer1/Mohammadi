@@ -22,5 +22,11 @@ public interface QuestionService {
 
     QuestionDTO addDescriptiveQuestion(String title, String description, int answerLengthLimit, Long teacherId, Long courseId);
 
+    Question updateQuestion(Long questionId, String newTitle, String newDescription, Long teacherId);
+
+    QuestionOption updateQuestionOption(Long optionId, String newText, boolean newIsCorrect, Long teacherId);
+
+    void deleteQuestion(Long questionId, Long teacherId);
+
 }
 

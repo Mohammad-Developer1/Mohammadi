@@ -47,6 +47,50 @@ public class QuestionController {
         return ResponseEntity.ok(questionService.convertToDTO(savedQuestion));
     }
 
+    @PutMapping("/editQuestion")
+    @ResponseBody
+    public ResponseEntity<QuestionDTO> editQuestion(
+            @RequestParam Long questionId,
+            @RequestParam String newTitle,
+            @RequestParam String newDescription,
+            @RequestParam Long teacherId) {
+
+        Question updatedQuestion = questionService.updateQuestion(questionId, newTitle, newDescription, teacherId);
+        return ResponseEntity.ok(questionService.convertToDTO(updatedQuestion));
+    }
+
+    @PutMapping("/editOption")
+    @ResponseBody
+    public ResponseEntity<ApiResponse> editQuestionOption(
+            @RequestParam Long optionId,
+            @RequestParam String newText,
+            @RequestParam boolean newIsCorrect,
+            @RequestParam Long teacherId) {
+
+        try {
+            QuestionOption updatedOption = questionService.updateQuestionOption(optionId, newText, newIsCorrect, teacherId);
+            return ResponseEntity.ok(new ApiResponse(true, "Option updated successfully", updatedOption));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse(false, "Error updating option: " + e.getMessage()));
+        }
+    }
+
+    @DeleteMapping("/deleteQuestion")
+    @ResponseBody
+    public ResponseEntity<ApiResponse> deleteQuestion(
+            @RequestParam Long questionId,
+            @RequestParam Long teacherId) {
+
+        try {
+            questionService.deleteQuestion(questionId, teacherId);
+            return ResponseEntity.ok(new ApiResponse(true, "Question and its options deleted successfully"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse(false, "Error deleting question: " + e.getMessage()));
+        }
+    }
+
 
 
 
