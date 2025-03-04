@@ -8,6 +8,7 @@ import ir.projectMohammadi.model.teacher.Teacher;
 import ir.projectMohammadi.repository.course.ICourseRepository;
 import ir.projectMohammadi.repository.exam.ExamRepository;
 import ir.projectMohammadi.repository.question.ExamQuestionRepository;
+import ir.projectMohammadi.repository.question.QuestionBankRepository;
 import ir.projectMohammadi.repository.question.QuestionOptionRepository;
 import ir.projectMohammadi.repository.question.QuestionRepository;
 import ir.projectMohammadi.repository.teacher.ITeacherRepository;
@@ -31,27 +32,53 @@ public class QuestionServiceImpl implements QuestionService {
     private final ICourseRepository courseRepository;
     private final ExamQuestionRepository examQuestionRepository;
     private final QuestionOptionRepository questionOptionRepository;
+    private final QuestionBankRepository questionBankRepository;
 
     @Override
     @Transactional
-    public Question addQuestion(Question question, Long teacherId, Long courseId) {
+    public Question addQuestion(String title, String description, String questionType, Long teacherId, Long courseId) {
         Teacher teacher = teacherRepository.findById(teacherId)
                 .orElseThrow(() -> new RuntimeException("Teacher not found"));
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
 
+        Question question;
+
+        // ایجاد سوال بر اساس نوع آن (چندگزینه‌ای یا تشریحی)
+        if ("MULTIPLE_CHOICE".equalsIgnoreCase(questionType)) {
+            question = new MultipleChoiceQuestion();
+        } else if ("DESCRIPTIVE".equalsIgnoreCase(questionType)) {
+            question = new DescriptiveQuestion();
+        } else {
+            throw new RuntimeException("Invalid question type.");
+        }
+
+        question.setTitle(title);
+        question.setDescription(description);
         question.setTeacher(teacher);
         question.setCourse(course);
 
-        if (question instanceof MultipleChoiceQuestion) {
-            MultipleChoiceQuestion mcq = (MultipleChoiceQuestion) question;
-            if (mcq.getOptions() == null) {
-                mcq.setOptions(new ArrayList<>());
-            }
+        Question savedQuestion = questionRepository.save(question);
+
+        // بررسی اینکه آیا سوال از قبل در بانک سوالات وجود دارد یا نه
+        boolean exists = questionBankRepository.existsByCourseAndQuestion(course, savedQuestion);
+        System.out.println(" بررسی سوال در بانک سوالات: " + exists);
+
+        // اگر سوال در بانک سوالات نبود، اضافه شود
+        if (!exists) {
+            QuestionBank questionBank = new QuestionBank();
+            questionBank.setCourse(course);
+            questionBank.setQuestion(savedQuestion);
+            questionBankRepository.save(questionBank);
+            System.out.println(" سوال در بانک سوالات اضافه شد.");
+        } else {
+            System.out.println(" سوال از قبل در بانک سوالات موجود است.");
         }
 
-        return questionRepository.save(question);
+        return savedQuestion;
     }
+
+
 
 
 

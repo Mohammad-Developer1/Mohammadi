@@ -162,7 +162,7 @@ public class CourseController {
                 courseViewModel.setStudentList(studentNames);
             }
 
-            if (course.getExams() != null) {
+            if (course.getExams() == null) {
                 List<ExamViewModel> examList = course.getExams().stream()
                         .map(exam -> {
                             ExamViewModel examViewModel = new ExamViewModel();

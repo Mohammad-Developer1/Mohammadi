@@ -6,6 +6,7 @@ import ir.projectMohammadi.service.course.ICourseService;
 import ir.projectMohammadi.service.exam.ExamService;
 import ir.projectMohammadi.util.ApiResponse;
 import ir.projectMohammadi.util.mapper.ModelMapper;
+import ir.projectMohammadi.web.viewModel.exam.ExamDTO;
 import ir.projectMohammadi.web.viewModel.exam.ExamViewModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -73,4 +74,28 @@ public class ExamController {
         examService.deleteExam(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/addQuestionToExam")
+    @ResponseBody
+    public ResponseEntity<ApiResponse> addQuestionToExam(
+            @RequestParam Long examId,
+            @RequestParam Long questionId,
+            @RequestParam Long teacherId,
+            @RequestParam Integer score) {
+        try {
+            examService.addQuestionToExam(examId, questionId, teacherId, score);
+            return ResponseEntity.ok(new ApiResponse(true, "Question added to exam successfully"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse(false, "Error adding question to exam: " + e.getMessage()));
+        }
+    }
+
+    @GetMapping("/getAllExams")
+    @ResponseBody
+    public ResponseEntity<List<ExamDTO>> getAllExamsWithQuestions() {
+        List<ExamDTO> exams = examService.getAllExamsWithQuestions();
+        return ResponseEntity.ok(exams);
+    }
+
 }

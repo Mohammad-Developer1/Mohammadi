@@ -30,7 +30,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> {
                         auth.requestMatchers("/api/auth/**", "/api/users/approve/**").permitAll();
-                        auth.requestMatchers( "/api/Course/getMyCourses","/api/exams/getExamsByCourseId/**", "/teacher/**","/api/exams/create").hasRole("TEACHER");
+                        auth.requestMatchers( "/api/Course/getMyCourses","/api/exams/getExamsByCourseId/**", "/teacher/**","/api/exams/create","/api/questions/**","/api/questionBank/**").hasRole("TEACHER");
                         auth.requestMatchers("/api/users/**", "/api/Course/**", "/student/**", "/teacher/**").hasRole("ADMIN");
                         auth.anyRequest().authenticated();
                     }

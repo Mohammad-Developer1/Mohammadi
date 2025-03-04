@@ -4,6 +4,7 @@ import ir.projectMohammadi.model.question.Question;
 import ir.projectMohammadi.model.question.QuestionOption;
 import ir.projectMohammadi.service.question.QuestionService;
 import ir.projectMohammadi.util.ApiResponse;
+import ir.projectMohammadi.web.viewModel.QuestionCreateDTO;
 import ir.projectMohammadi.web.viewModel.QuestionDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,13 +34,19 @@ public class QuestionController {
     @PostMapping("/addQuestion")
     @ResponseBody
     public ResponseEntity<QuestionDTO> addQuestion(
-            @RequestBody Question question,
-            @RequestParam Long teacherId,
-            @RequestParam Long courseId) {
+            @RequestBody QuestionCreateDTO questionDTO) {
 
-        Question savedQuestion = questionService.addQuestion(question, teacherId, courseId);
+        Question savedQuestion = questionService.addQuestion(
+                questionDTO.getTitle(),
+                questionDTO.getDescription(),
+                questionDTO.getQuestionType(),
+                questionDTO.getTeacherId(),
+                questionDTO.getCourseId()
+        );
+
         return ResponseEntity.ok(questionService.convertToDTO(savedQuestion));
     }
+
 
 
 
