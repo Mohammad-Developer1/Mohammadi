@@ -106,9 +106,6 @@ public class QuestionController {
         }
     }
 
-
-
-
     @GetMapping("/bank/{courseId}")
     @ResponseBody
     public ResponseEntity<List<QuestionDTO>> getTeacherQuestionBank(

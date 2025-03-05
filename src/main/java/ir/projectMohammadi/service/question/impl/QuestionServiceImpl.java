@@ -60,22 +60,17 @@ public class QuestionServiceImpl implements QuestionService {
 
         Question savedQuestion = questionRepository.save(question);
 
-        boolean exists = questionBankRepository.existsByCourseAndQuestion(course, savedQuestion);
-        System.out.println(" بررسی سوال در بانک سوالات: " + exists);
-
-        if (!exists) {
+        if (!questionBankRepository.existsByCourseAndQuestion(course, savedQuestion)) {
             QuestionBank questionBank = new QuestionBank();
             questionBank.setTitle(title);
             questionBank.setCourse(course);
             questionBank.setQuestion(savedQuestion);
             questionBankRepository.save(questionBank);
-            System.out.println(" سوال در بانک سوالات اضافه شد.");
-        } else {
-            System.out.println("سوال از قبل در بانک سوالات موجود است.");
         }
 
         return savedQuestion;
     }
+
 
     @Override
     @Transactional
@@ -156,13 +151,6 @@ public class QuestionServiceImpl implements QuestionService {
 
         questionRepository.delete(question);
     }
-
-
-
-
-
-
-
 
     @Override
     public List<Question> getTeacherQuestionBank(Long teacherId, Long courseId) {

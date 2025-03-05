@@ -53,6 +53,25 @@ public class ExamServiceImpl implements ExamService  {
         return examRepository.save(exam);
     }
 
+    @Override
+    @Transactional
+    public void setScore(Long examId, Long questionId, Integer score, Long teacherId) {
+        ExamQuestion examQuestion = examQuestionRepository.findByExam_IDAndQuestion_ID(examId, questionId)
+                .orElseThrow(() -> new RuntimeException("ExamQuestion not found"));
+
+        if (!examQuestion.getExam().getCourse().getTeacher().getID().equals(teacherId)) {
+            throw new RuntimeException("You can only set scores for your own exams.");
+        }
+
+        examQuestion.setScore(score);
+        examQuestionRepository.save(examQuestion);
+    }
+
+    @Override
+    public Integer getTotalScoreForExam(Long examId) {
+        return examQuestionRepository.getTotalScoreForExam(examId);
+    }
+
 
     @Override
     public List<Exam> getExamsByCourse(Long courseId) {
@@ -100,29 +119,29 @@ public class ExamServiceImpl implements ExamService  {
         Question question = questionRepository.findById(questionId)
                 .orElseThrow(() -> new RuntimeException("Question not found"));
 
-        // بررسی اینکه استاد فقط سوالات خودش را به آزمون‌های خودش اضافه کند
+
         if (!question.getTeacher().getID().equals(teacherId)) {
             throw new RuntimeException("You can only add your own questions to the exam.");
         }
 
-        // بررسی اینکه آزمون متعلق به همان استاد است
+
         if (!exam.getCourse().getTeacher().getID().equals(teacherId)) {
             throw new RuntimeException("You can only modify your own exams.");
         }
 
-        // بررسی اینکه سوال مربوط به همان دوره آزمون است
+
         if (!question.getCourse().getID().equals(exam.getCourse().getID())) {
             throw new RuntimeException("The question must belong to the same course as the exam.");
         }
 
-        // اضافه کردن سوال به آزمون
+
         ExamQuestion examQuestion = new ExamQuestion();
         examQuestion.setExam(exam);
         examQuestion.setQuestion(question);
         examQuestion.setScore(score);
         examQuestionRepository.save(examQuestion);
 
-        // اضافه کردن سوال به بانک سوالات (اگر از قبل وجود نداشته باشد)
+
         Course course = exam.getCourse();
         if (!questionBankRepository.existsByCourseAndQuestion(course, question)) {
             QuestionBank questionBank = new QuestionBank();

@@ -98,4 +98,27 @@ public class ExamController {
         return ResponseEntity.ok(exams);
     }
 
+    @PutMapping("/setScore")
+    @ResponseBody
+    public ResponseEntity<ApiResponse> setScore(
+            @RequestParam Long examId,
+            @RequestParam Long questionId,
+            @RequestParam Integer score,
+            @RequestParam Long teacherId) {
+
+        try {
+            examService.setScore(examId, questionId, score, teacherId);
+            return ResponseEntity.ok(new ApiResponse(true, "Score set successfully"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse(false, "Error setting score: " + e.getMessage()));
+        }
+    }
+
+    @GetMapping("/getTotalScore")
+    @ResponseBody
+    public ResponseEntity<Integer> getTotalScore(@RequestParam Long examId) {
+        Integer totalScore = examService.getTotalScoreForExam(examId);
+        return ResponseEntity.ok(totalScore);
+    }
 }

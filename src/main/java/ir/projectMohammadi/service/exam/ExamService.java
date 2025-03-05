@@ -13,5 +13,7 @@ public interface ExamService {
     Exam updateExam(Long examId, ExamViewModel examViewModel);
     void addQuestionToExam(Long examId, Long questionId, Long teacherId, Integer score);
     List<ExamDTO> getAllExamsWithQuestions();
+    void setScore(Long examId, Long questionId, Integer score, Long teacherId);
 
+    Integer getTotalScoreForExam(Long examId);
 }
