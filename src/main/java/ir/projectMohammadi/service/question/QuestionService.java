@@ -12,8 +12,6 @@ public interface QuestionService {
 
     List<Question> getTeacherQuestionBank(Long teacherId, Long courseId);
 
-    void addQuestionToExam(Long questionId, Long examId, Integer score);
-
     QuestionDTO convertToDTO(Question question);
 
     QuestionOption addOptionToQuestion(Long questionId, String optionText, boolean isCorrect);

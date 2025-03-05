@@ -21,16 +21,6 @@ public class QuestionController {
     private final QuestionService questionService;
 
 
-    @PostMapping("/addQuestionToExam")
-    @ResponseBody
-    public ResponseEntity<Void> addQuestionToExam(
-            @RequestParam Long questionId,
-            @RequestParam Long examId,
-            @RequestParam Integer score) {
-        questionService.addQuestionToExam(questionId, examId, score);
-        return ResponseEntity.ok().build();
-    }
-
     @PostMapping("/addQuestion")
     @ResponseBody
     public ResponseEntity<QuestionDTO> addQuestion(

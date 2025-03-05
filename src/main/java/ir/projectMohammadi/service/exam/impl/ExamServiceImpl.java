@@ -205,5 +205,4 @@ public class ExamServiceImpl implements ExamService  {
             return examDTO;
         }).toList();
     }
-
 }

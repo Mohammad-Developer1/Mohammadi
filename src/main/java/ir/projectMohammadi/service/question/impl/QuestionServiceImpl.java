@@ -2,7 +2,6 @@ package ir.projectMohammadi.service.question.impl;
 
 
 import ir.projectMohammadi.model.course.Course;
-import ir.projectMohammadi.model.exam.Exam;
 import ir.projectMohammadi.model.question.*;
 import ir.projectMohammadi.model.teacher.Teacher;
 import ir.projectMohammadi.repository.course.ICourseRepository;
@@ -157,23 +156,6 @@ public class QuestionServiceImpl implements QuestionService {
         return questionRepository.findByTeacher_IDAndCourse_ID(teacherId, courseId);
     }
 
-
-    @Override
-    @Transactional
-    public void addQuestionToExam(Long questionId, Long examId, Integer score) {
-        Question question = questionRepository.findById(questionId)
-                .orElseThrow(() -> new RuntimeException("Question not found"));
-
-        Exam exam = examRepository.findById(examId)
-                .orElseThrow(() -> new RuntimeException("Exam not found"));
-
-        ExamQuestion examQuestion = new ExamQuestion();
-        examQuestion.setExam(exam);
-        examQuestion.setQuestion(question);
-        examQuestion.setScore(score);
-
-        examQuestionRepository.save(examQuestion);
-    }
 
     @Override
     public QuestionDTO convertToDTO(Question question) {

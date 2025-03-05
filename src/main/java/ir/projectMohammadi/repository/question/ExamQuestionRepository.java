@@ -23,4 +23,6 @@ public interface ExamQuestionRepository extends JpaRepository<ExamQuestion, Long
 
     @Query("SELECT SUM(eq.score) FROM ExamQuestion eq WHERE eq.exam.id = :examId")
     Integer getTotalScoreForExam(@Param("examId") Long examId);
+
+    boolean existsByExamAndQuestion(Exam exam, Question question);
 }
