@@ -8,7 +8,6 @@ import ir.projectMohammadi.model.question.Question;
 import ir.projectMohammadi.model.question.QuestionOption;
 import ir.projectMohammadi.model.teacher.Teacher;
 import ir.projectMohammadi.repository.course.ICourseRepository;
-import ir.projectMohammadi.repository.exam.ExamRepository;
 import ir.projectMohammadi.repository.question.ExamQuestionRepository;
 import ir.projectMohammadi.repository.question.QuestionOptionRepository;
 import ir.projectMohammadi.repository.question.QuestionRepository;
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +29,6 @@ public class QuestionServiceImpl implements QuestionService {
 
     private final QuestionRepository questionRepository;
     private final ITeacherRepository teacherRepository;
-    private final ExamRepository examRepository;
     private final ICourseRepository courseRepository;
     private final ExamQuestionRepository examQuestionRepository;
     private final QuestionOptionRepository questionOptionRepository;
