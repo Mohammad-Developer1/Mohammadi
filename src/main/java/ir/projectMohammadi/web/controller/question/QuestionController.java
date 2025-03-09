@@ -4,7 +4,6 @@ import ir.projectMohammadi.model.question.Question;
 import ir.projectMohammadi.model.question.QuestionOption;
 import ir.projectMohammadi.service.question.QuestionService;
 import ir.projectMohammadi.util.ApiResponse;
-import ir.projectMohammadi.web.viewModel.QuestionCreateDTO;
 import ir.projectMohammadi.web.viewModel.QuestionDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,30 +23,27 @@ public class QuestionController {
     @PostMapping("/addQuestion")
     @ResponseBody
     public ResponseEntity<QuestionDTO> addQuestion(
-            @RequestBody QuestionCreateDTO questionDTO) {
+            @RequestParam String title,
+            @RequestParam String description,
+            @RequestParam String questionType,
+            @RequestParam Long courseId) {
 
-        Question savedQuestion = questionService.addQuestion(
-                questionDTO.getTitle(),
-                questionDTO.getDescription(),
-                questionDTO.getQuestionType(),
-                questionDTO.getTeacherId(),
-                questionDTO.getCourseId()
-        );
-
+        Question savedQuestion = questionService.addQuestion(title, description, questionType, courseId);
         return ResponseEntity.ok(questionService.convertToDTO(savedQuestion));
     }
 
-    @PutMapping("/editQuestion")
+
+    @PutMapping("/updateQuestion")
     @ResponseBody
-    public ResponseEntity<QuestionDTO> editQuestion(
+    public ResponseEntity<QuestionDTO> updateQuestion(
             @RequestParam Long questionId,
             @RequestParam String newTitle,
-            @RequestParam String newDescription,
-            @RequestParam Long teacherId) {
+            @RequestParam String newDescription) {
 
-        Question updatedQuestion = questionService.updateQuestion(questionId, newTitle, newDescription, teacherId);
+        Question updatedQuestion = questionService.updateQuestion(questionId, newTitle, newDescription);
         return ResponseEntity.ok(questionService.convertToDTO(updatedQuestion));
     }
+
 
     @PutMapping("/editOption")
     @ResponseBody

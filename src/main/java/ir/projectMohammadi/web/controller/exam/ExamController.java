@@ -80,16 +80,17 @@ public class ExamController {
     public ResponseEntity<ApiResponse> addQuestionToExam(
             @RequestParam Long examId,
             @RequestParam Long questionId,
-            @RequestParam Long teacherId,
             @RequestParam Integer score) {
+
         try {
-            examService.addQuestionToExam(examId, questionId, teacherId, score);
+            examService.addQuestionToExam(examId, questionId, score);
             return ResponseEntity.ok(new ApiResponse(true, "Question added to exam successfully"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse(false, "Error adding question to exam: " + e.getMessage()));
         }
     }
+
 
     @GetMapping("/getAllExams")
     @ResponseBody

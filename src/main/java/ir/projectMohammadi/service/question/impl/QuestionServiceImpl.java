@@ -2,12 +2,14 @@ package ir.projectMohammadi.service.question.impl;
 
 
 import ir.projectMohammadi.model.course.Course;
-import ir.projectMohammadi.model.question.*;
+import ir.projectMohammadi.model.question.DescriptiveQuestion;
+import ir.projectMohammadi.model.question.MultipleChoiceQuestion;
+import ir.projectMohammadi.model.question.Question;
+import ir.projectMohammadi.model.question.QuestionOption;
 import ir.projectMohammadi.model.teacher.Teacher;
 import ir.projectMohammadi.repository.course.ICourseRepository;
 import ir.projectMohammadi.repository.exam.ExamRepository;
 import ir.projectMohammadi.repository.question.ExamQuestionRepository;
-import ir.projectMohammadi.repository.question.QuestionBankRepository;
 import ir.projectMohammadi.repository.question.QuestionOptionRepository;
 import ir.projectMohammadi.repository.question.QuestionRepository;
 import ir.projectMohammadi.repository.teacher.ITeacherRepository;
@@ -16,6 +18,7 @@ import ir.projectMohammadi.web.viewModel.QuestionDTO;
 import ir.projectMohammadi.web.viewModel.QuestionOptionDTO;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -32,18 +35,24 @@ public class QuestionServiceImpl implements QuestionService {
     private final ICourseRepository courseRepository;
     private final ExamQuestionRepository examQuestionRepository;
     private final QuestionOptionRepository questionOptionRepository;
-    private final QuestionBankRepository questionBankRepository;
 
     @Override
     @Transactional
-    public Question addQuestion(String title, String description, String questionType, Long teacherId, Long courseId) {
-        Teacher teacher = teacherRepository.findById(teacherId)
+    public Question addQuestion(String title, String description, String questionType ,Long courseId) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        Teacher teacher = teacherRepository.findByUser_Username(username)
                 .orElseThrow(() -> new RuntimeException("Teacher not found"));
+
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
 
-        Question question;
+        boolean exists = questionRepository.existsByTitleAndCourse(title, course);
+        if (exists) {
+            throw new RuntimeException("This question already exists in the question bank for this course.");
+        }
 
+        Question question;
         if ("MULTIPLE_CHOICE".equalsIgnoreCase(questionType)) {
             question = new MultipleChoiceQuestion();
         } else if ("DESCRIPTIVE".equalsIgnoreCase(questionType)) {
@@ -57,18 +66,9 @@ public class QuestionServiceImpl implements QuestionService {
         question.setTeacher(teacher);
         question.setCourse(course);
 
-        Question savedQuestion = questionRepository.save(question);
-
-        if (!questionBankRepository.existsByCourseAndQuestion(course, savedQuestion)) {
-            QuestionBank questionBank = new QuestionBank();
-            questionBank.setTitle(title);
-            questionBank.setCourse(course);
-            questionBank.setQuestion(savedQuestion);
-            questionBankRepository.save(questionBank);
-        }
-
-        return savedQuestion;
+        return questionRepository.save(question);
     }
+
 
 
     @Override
@@ -87,27 +87,25 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     @Transactional
-    public Question updateQuestion(Long questionId, String newTitle, String newDescription, Long teacherId) {
+    public Question updateQuestion(Long questionId, String newTitle, String newDescription) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        Teacher teacher = teacherRepository.findByUser_Username(username)
+                .orElseThrow(() -> new RuntimeException("Teacher not found"));
+
         Question question = questionRepository.findById(questionId)
                 .orElseThrow(() -> new RuntimeException("Question not found"));
 
-        if (!question.getTeacher().getID().equals(teacherId)) {
+        if (!question.getTeacher().getID().equals(teacher.getID())) {
             throw new RuntimeException("You can only edit your own questions.");
         }
 
         question.setTitle(newTitle);
         question.setDescription(newDescription);
 
-        Question updatedQuestion = questionRepository.save(question);
-
-        Optional<QuestionBank> questionBank = questionBankRepository.findByQuestion(updatedQuestion);
-        questionBank.ifPresent(qb -> {
-            qb.setTitle(newTitle);
-            questionBankRepository.save(qb);
-        });
-
-        return updatedQuestion;
+        return questionRepository.save(question);
     }
+
 
 
     @Override
@@ -145,8 +143,6 @@ public class QuestionServiceImpl implements QuestionService {
         if (question instanceof MultipleChoiceQuestion) {
             questionOptionRepository.deleteByQuestion((MultipleChoiceQuestion) question);
         }
-
-        questionBankRepository.deleteByQuestion(question);
 
         questionRepository.delete(question);
     }

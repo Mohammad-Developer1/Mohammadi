@@ -6,12 +6,12 @@ import ir.projectMohammadi.model.exam.Exam;
 import ir.projectMohammadi.model.question.ExamQuestion;
 import ir.projectMohammadi.model.question.MultipleChoiceQuestion;
 import ir.projectMohammadi.model.question.Question;
-import ir.projectMohammadi.model.question.QuestionBank;
+import ir.projectMohammadi.model.teacher.Teacher;
 import ir.projectMohammadi.repository.course.ICourseRepository;
 import ir.projectMohammadi.repository.exam.ExamRepository;
 import ir.projectMohammadi.repository.question.ExamQuestionRepository;
-import ir.projectMohammadi.repository.question.QuestionBankRepository;
 import ir.projectMohammadi.repository.question.QuestionRepository;
+import ir.projectMohammadi.repository.teacher.ITeacherRepository;
 import ir.projectMohammadi.service.exam.ExamService;
 import ir.projectMohammadi.web.viewModel.exam.ExamDTO;
 import ir.projectMohammadi.web.viewModel.exam.ExamQuestionDTO;
@@ -19,6 +19,7 @@ import ir.projectMohammadi.web.viewModel.exam.ExamQuestionOptionDTO;
 import ir.projectMohammadi.web.viewModel.exam.ExamViewModel;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class ExamServiceImpl implements ExamService  {
 
     private final QuestionRepository questionRepository;
     private final ExamQuestionRepository examQuestionRepository;
-    private final QuestionBankRepository questionBankRepository;
+    private final ITeacherRepository teacherRepository;
 
     @Override
     public Exam createExam(Exam exam) {
@@ -112,44 +113,46 @@ public class ExamServiceImpl implements ExamService  {
 
     @Override
     @Transactional
-    public void addQuestionToExam(Long examId, Long questionId, Long teacherId, Integer score) {
+    public void addQuestionToExam(Long examId, Long questionId, Integer score) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        Teacher teacher = teacherRepository.findByUser_Username(username)
+                .orElseThrow(() -> new RuntimeException("Teacher not found"));
+
         Exam exam = examRepository.findById(examId)
                 .orElseThrow(() -> new RuntimeException("Exam not found"));
 
         Question question = questionRepository.findById(questionId)
                 .orElseThrow(() -> new RuntimeException("Question not found"));
 
-
-        if (!question.getTeacher().getID().equals(teacherId)) {
+        // بررسی اینکه آیا استاد صاحب سوال است
+        if (!question.getTeacher().getID().equals(teacher.getID())) {
             throw new RuntimeException("You can only add your own questions to the exam.");
         }
 
-
-        if (!exam.getCourse().getTeacher().getID().equals(teacherId)) {
+        // بررسی اینکه آیا استاد صاحب آزمون است
+        if (!exam.getCourse().getTeacher().getID().equals(teacher.getID())) {
             throw new RuntimeException("You can only modify your own exams.");
         }
 
-
+        // بررسی اینکه آیا سوال و آزمون به یک دوره تعلق دارند
         if (!question.getCourse().getID().equals(exam.getCourse().getID())) {
             throw new RuntimeException("The question must belong to the same course as the exam.");
         }
 
+        // بررسی اینکه آیا سوال قبلاً به این آزمون اضافه شده است
+        boolean exists = examQuestionRepository.existsByExamAndQuestion(exam, question);
+        if (exists) {
+            throw new RuntimeException("This question is already added to the exam.");
+        }
 
         ExamQuestion examQuestion = new ExamQuestion();
         examQuestion.setExam(exam);
         examQuestion.setQuestion(question);
         examQuestion.setScore(score);
         examQuestionRepository.save(examQuestion);
-
-
-        Course course = exam.getCourse();
-        if (!questionBankRepository.existsByCourseAndQuestion(course, question)) {
-            QuestionBank questionBank = new QuestionBank();
-            questionBank.setCourse(course);
-            questionBank.setQuestion(question);
-            questionBankRepository.save(questionBank);
-        }
     }
+
 
 
 

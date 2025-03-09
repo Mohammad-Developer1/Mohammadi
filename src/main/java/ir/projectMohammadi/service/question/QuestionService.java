@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface QuestionService {
 
-    Question addQuestion(String title, String description, String questionType, Long teacherId, Long courseId);
+    Question addQuestion(String title, String description, String questionType ,Long courseId);
 
     List<Question> getTeacherQuestionBank(Long teacherId, Long courseId);
 
@@ -20,7 +20,7 @@ public interface QuestionService {
 
     QuestionDTO addDescriptiveQuestion(String title, String description, int answerLengthLimit, Long teacherId, Long courseId);
 
-    Question updateQuestion(Long questionId, String newTitle, String newDescription, Long teacherId);
+    Question updateQuestion(Long questionId, String newTitle, String newDescription);
 
     QuestionOption updateQuestionOption(Long optionId, String newText, boolean newIsCorrect, Long teacherId);
 
